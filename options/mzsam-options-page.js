@@ -19,7 +19,7 @@
 import { samStore } from "../js/mzsam-store.js";
 import { samLogger } from "../js/mzsam-logger.js";
 import { i18n } from "../js/mzsam-i18n.js";
-import { samPrefs } from "./mzsam-options.js";
+import { samPrefs } from "../js/mzsam-options.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     samStore.do_debug = await samPrefs.getPref("do_debug");

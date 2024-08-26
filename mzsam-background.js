@@ -20,8 +20,8 @@
 import { movingEngine } from "./js/mzsam-moving-engine.js";
 import { samUtils } from "./js/mzsam-utils.js";
 import { samStore } from "./js/mzsam-store.js";
-import { samPrefs } from "./options/mzsam-options.js";
-import { prefs_default } from "./options/mzsam-options-default.js";
+import { samPrefs } from "./js/mzsam-options.js";
+import { prefs_default } from "./js/mzsam-options-default.js";
 //import { samLogger } from "./js/mzsam-logger.js";
 
 // messenger.messages.onNewMailReceived.addListener(async (folder, messages) => {

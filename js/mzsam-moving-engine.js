@@ -20,7 +20,7 @@
 import { samStore } from "./mzsam-store.js";
 import { samUtils } from "./mzsam-utils.js";
 import { samLogger } from "./mzsam-logger.js";
-import { samPrefs } from "../options/mzsam-options.js";
+import { samPrefs } from "./mzsam-options.js";
 import { samReport } from "./mzsam-report.js";
 
 export class movingEngine {
