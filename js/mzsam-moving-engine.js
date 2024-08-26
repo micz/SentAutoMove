@@ -219,8 +219,8 @@ export class movingEngine {
       yield* this.getMessages(browser.messages.query(queryInfo));
       return;
     }
-    console.log(">>>>>>>>>> getAccountMessages queryInfo: " + JSON.stringify(queryInfo));
-    console.log(">>>>>>>>>> getAccountMessages account_id: " + account_id);
+    // console.log(">>>>>>>>>> getAccountMessages queryInfo: " + JSON.stringify(queryInfo));
+    // console.log(">>>>>>>>>> getAccountMessages account_id: " + account_id);
     let account = await browser.accounts.get(account_id, true);
     let folders = await browser.folders.getSubFolders(account);
 
@@ -239,7 +239,7 @@ export class movingEngine {
 
     //console.log(`>>>>>>>> processFolderAndSubfolders Listing messages for folder: ${folder.name}, path: ${folder.path}`);
     queryInfo.folder = folder;
-    console.log(">>>>>>>>>> processFolderAndSubfolders queryInfo: " + JSON.stringify(queryInfo));
+    // console.log(">>>>>>>>>> processFolderAndSubfolders queryInfo: " + JSON.stringify(queryInfo));
     yield* this.getMessages(browser.messages.query(queryInfo));
 
     let subfolders = await browser.folders.getSubFolders(folder);
