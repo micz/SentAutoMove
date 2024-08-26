@@ -1,5 +1,4 @@
-/*                   FOR THE FOLLOWING CODE
- *
+/*
  *  SentAutoMove [https://micz.it/thunderbird-addon-sentautomove/]
  *  Copyright (C) 2024  Mic (m@micz.it)
 
