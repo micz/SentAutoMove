@@ -30,11 +30,12 @@ export const samReport = {
     },
 
     async loadReportData(data_id){
-        return await browser.storage.session.get(data_id);
+        let output = await browser.storage.session.get(data_id);
+        return output[data_id];
     },
 
     openReportTab(data_id){
-        browser.tabs.create({active: false, url: browser.runtime.getURL('report/mzsam-report.html') + '?data_id=' + data_id});
+        browser.tabs.create({active: false, url: browser.runtime.getURL('report/mzsam-report.html') + '?report_id=' + data_id});
     },
 
 }
