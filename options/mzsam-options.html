@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="mzsam-options.css">
+  </head>
+  <body>
+    <div id="miczRelNotes"><a href="mzsam-release-notes.html">__MSG_prefs_OptionText_release_notes__</a></div>
+    <table id="miczPrefs">
+      <tr>
+        <td>
+          <label>
+            <span>__MSG_prefs_OptionText_dest_folder_type__</span>
+          </label>
+        </td>
+        <td>
+          <label>
+            <select id="dest_folder_type" name="dest_folder_type" class="option-input">
+              <option value="subfolder">__MSG_prefs_OptionText_subfolder__</option>
+              <option value="same_folder">__MSG_prefs_OptionText_same_folder__</option>
+            </select>
+            <br><span>__MSG_prefs_OptionText_dest_folder_type_info__</span>
+          </label>
+        </td>
+      </tr>
+      <tr class="dest_folder_type_subfolder">
+        <td><label>
+          <span>__MSG_prefs_OptionText_dest_folder_prefix__</span>
+        </label></td>
+        <td>
+          <label>
+            <input type="text" id="dest_folder_prefix" name="dest_folder_prefix" class="option-input" />
+            <br><span>__MSG_prefs_OptionText_dest_folder_prefix_info__</span>
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td><label>
+          <span>__MSG_prefs_OptionText_do_only_same_account__</span>
+        </label></td>
+        <td>
+          <label>
+            <input type="checkbox" id="do_only_same_account" name="do_only_same_account" class="option-input" />
+            <span>__MSG_prefs_OptionText_do_only_same_account_info__</span>
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td><label>
+          <span>__MSG_prefs_OptionText_do_only_sent__</span>
+        </label></td>
+        <td>
+          <label>
+            <input type="checkbox" id="do_only_sent" name="do_only_sent" class="option-input" />
+            <span>__MSG_prefs_OptionText_do_only_sent_info__</span>
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td><label>
+          <span>__MSG_prefs_OptionText_ignore_archive_folders__</span>
+        </label></td>
+        <td>
+          <label>
+            <input type="checkbox" id="ignore_archive_folders" name="ignore_archive_folders" class="option-input" />
+            <span>__MSG_prefs_OptionText_ignore_archive_folders_info__</span>
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <tr>
+          <td><label>
+            <span>__MSG_prefs_OptionText_min_moves_to_report__</span>
+          </label></td>
+          <td>
+            <label>
+              <input type="number" id="min_moves_to_report" name="min_moves_to_report" class="option-input" /> __MSG_prefs_OptionText_min_moves_to_report_info_2__
+              <br><span>__MSG_prefs_OptionText_min_moves_to_report_info__</span>
+            </label>
+          </td>
+        </tr>
+        <tr>
+        <td><label>
+          <span>__MSG_prefs_OptionText_do_debug__</span>
+        </label></td>
+        <td>
+          <label>
+            <input type="checkbox" id="do_debug" name="do_debug" class="option-input" />
+            <span>__MSG_prefs_OptionText_do_debug_info__</span>
+          </label>
+        </td>
+      </tr>
+    </table>
+    <div id="miczDescription">
+      <h1>__MSG_prefsInfoTitle__</h1>
+      <p><span>__MSG_prefsInfoDesc_1__<br/></span>
+        <span>__MSG_prefsInfoDesc_2__<br/></span>
+          <span>__MSG_prefsInfoDesc_3__</span></p>
+    </div>
+    <div id="miczTranslate">__MSG_TranslateText__ <a href="https://micz.it/thunderbird-addon-sentautomove/translate/">__MSG_TranslateLink__</a></div>
+    <div id="miczDonation">__MSG_prefsDonation_1__<br/><a href="http://micz.it/thunderbird-addon-sentautomove/donate/">__MSG_prefsDonation_2__</a></div>
+    <script src="mzsam-options-page.js" type="module"></script>
+  </body>
+</html>

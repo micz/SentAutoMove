@@ -1,0 +1,84 @@
+{
+  "extensionDescription": {
+    "message": "Let your replies follow their original message!",
+    "description": "Description of the extension."
+  },
+  "prefs_OptionText_release_notes": {
+    "message": "Release Notes"
+  },
+  "prefs_OptionText_dest_folder_type": {
+    "message": "Destination folder"
+  },
+  "prefs_OptionText_subfolder": {
+    "message": "Subfolder"
+  },
+  "prefs_OptionText_same_folder": {
+    "message": "Same folder"
+  },
+  "prefs_OptionText_dest_folder_type_info": {
+    "message": "Choose whether to move the mails to a subfolder or the same folder."
+  },
+  "prefs_OptionText_dest_folder_prefix": {
+    "message": "Subfolder prefix"
+  },
+  "prefs_OptionText_dest_folder_prefix_info": {
+    "message": "Specify a prefix for the subfolder name where the mails will be moved."
+  },
+  "prefs_OptionText_do_only_same_account": {
+    "message": "Same account only"
+  },
+  "prefs_OptionText_do_only_same_account_info": {
+    "message": "Search for related mail only in the same account."
+  },
+  "prefs_OptionText_do_only_sent": {
+    "message": "Sent mails only"
+  },
+  "prefs_OptionText_do_only_sent_info": {
+    "message": "Consider only mails that are sent by the account owner of the considered folder."
+  },
+  "prefs_OptionText_ignore_archive_folders": {
+    "message": "Ignore archive folders"
+  },
+  "prefs_OptionText_ignore_archive_folders_info": {
+    "message": "Do not search for related mails that are in archive folders."
+  },
+  "prefs_OptionText_min_moves_to_report": {
+    "message": "Minimum mails moved to report"
+  },
+  "prefs_OptionText_min_moves_to_report_info": {
+    "message": "Set the minimum number of mail moved to generate a report in a new tab."
+  },
+  "prefs_OptionText_min_moves_to_report_info_2": {
+    "message": "(0 = Always)"
+  },
+  "prefs_OptionText_do_debug": {
+    "message": "Enable Debug Mode"
+  },
+  "prefs_OptionText_do_debug_info": {
+    "message": "Turn on debug mode for additional logging."
+  },
+  "prefsInfoTitle": {
+    "message": "Important Information"
+  },
+  "prefsInfoDesc_1": {
+    "message": " "
+  },
+  "prefsInfoDesc_2": {
+    "message": " "
+  },
+  "prefsInfoDesc_3": {
+    "message": " "
+  },
+  "TranslateText": {
+    "message": "Do you want to help translate this addon?"
+  },
+  "TranslateLink": {
+    "message": "Find out how!"
+  },
+  "prefsDonation_1": {
+    "message": "Do you like this addon?"
+  },
+  "prefsDonation_2": {
+    "message": "Consider to make a donation!"
+  }
+}
