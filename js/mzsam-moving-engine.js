@@ -125,7 +125,7 @@ export class movingEngine {
         samUtils.showNotification("Sent Auto Move", "Operation completed\n"  + tot_messages + " messages analyzed\n" + tot_moved + " moved\n" + tot_dest_not_found + " not moved: destination folder not found");
         this.logger.log("Operation completed: " + tot_messages + " messages analyzed, " + tot_moved + " messages moved, " + tot_dest_not_found + " messages not moved: dest folder not found.");
         
-        let report_id = account_id + "_" + (new Date()).toISOString().replace(/[-.]/g, '').replace(/T/, '').replace(/Z/, '') + "_" + Math.floor(Math.random() * 10000);
+        let report_id = account_id + "_" +  (new Date()).toLocaleString(undefined,{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).replace(/[-:.,// ]/g, '') + "_" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
         report_data.tot_messages = tot_messages;
         report_data.tot_moved = tot_moved;
         report_data.tot_dest_not_found = tot_dest_not_found;
