@@ -163,7 +163,8 @@ export class movingEngine {
 
         if(found_messages == null) found_messages = this.getMessages(messenger.messages.query(query_params));
 
-        // TODO check also the header "References"? At the moment no...
+        // TODO check also the header "References" see https://www.jwz.org/doc/threading.html
+        // and "Thread-Index": see https://managing.blue/2007/12/11/trying-to-make-use-of-outlooks-thread-index-header/
 
         for await (let found_msg of found_messages) {
           this.logger.log("Related found_msg.subject: [" + found_msg.folder.name + "] " + found_msg.subject + " [" + message.headerMessageId + "]");
