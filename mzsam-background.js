@@ -46,6 +46,7 @@ samStore.do_debug = await samPrefs.getPref("do_debug");
 
 browser.browserAction.onClicked.addListener(async () => {
     let prefs = await samPrefs.getPrefs(Object.keys(prefs_default));
+    samStore.do_debug = prefs.do_debug;
 
     let folder = await samUtils.getCurrentTabFolder();
     let params = {};
