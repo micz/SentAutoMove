@@ -95,6 +95,11 @@ export const samUtils = {
     return account_emails;
   },
 
+  async getAccountName(account_id) {
+    let account = await browser.accounts.get(account_id,false);
+    return account.name;
+  },
+
   // async getAccountFoldersIds(account_id, ignore_archive_folders = true) {    // only TB128+
   //   let output = [];
 
@@ -166,6 +171,44 @@ export const samUtils = {
         //"iconUrl": browser.runtime.getURL("images/icon.png"),
         "message": message
     });
+  },
+
+  extractInviteSubject(inputString) {
+    // Controlla se la stringa contiene ':'
+    if (inputString.includes(':')) {
+      // Estrae la parte della stringa dopo i due punti e rimuove gli spazi in eccesso
+      return inputString.split(':')[1].trim();
+    } else {
+      // Restituisce la stringa originale se ':' non è presente
+      return inputString;
+    }
+  },
+
+  convertFromMilliseconds(milliseconds) {
+    const hours = Math.floor(milliseconds / 3600000);
+    const minutes = Math.floor((milliseconds % 3600000) / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    const remainingMilliseconds = milliseconds % 1000;
+    
+    let result = '';
+
+    if (hours !== 0) {
+        result += hours + 'h ';
+    }
+
+    if (minutes !== 0) {
+        result += minutes + 'm ';
+    }
+
+    if (seconds !== 0) {
+        result += seconds + 's ';
+    }
+
+    if (remainingMilliseconds !== 0) {
+        result += remainingMilliseconds + 'ms';
+    }
+
+    return result.trim();
   },
 
 }
