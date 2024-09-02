@@ -6,17 +6,49 @@
     <title>SentAutoMove Report</title>
 </head>
 <body>
-<div id="miczReportHeader">
-Current folder: <span id="current_folder"></span>
-<br>Current account id: <span id="current_account_id"></span>
-<br>
-<br><b>Messages</b> (total count: <span id="tot_messages"></span>)
-<br>Moved: <span id="tot_moved"></span>
-<br>Not moved: <span id="tot_dest_not_found"></span>
+<div id="miczReportHeader" class="container">
+    <div class="section">
+        <div class="section-title">Sent Auto Move Report</div>
+        <div class="info">Date: <strong><span id="report_date"></span></strong></div>
+        <div class="info">Elapsed: <strong><span id="elapsed_time"></span></strong></div>
+        <div class="info">Current account: <strong><span id="current_account_id"></span></strong></div>
+        <div class="info">Current folder: <strong><span id="current_folder"></span></strong></div>
+    </div>
 
+    <!-- Section for message counts -->
+    <div class="section">
+        <div class="section-title">Messages</div>
+        <!-- Total messages styled distinctly and placed above -->
+        <div class="total">
+            <span id="tot_messages"></span>
+            <small>Total</small>
+        </div>
+        <!-- Detailed message counts below the total -->
+        <div class="list-details">
+            <!-- Moved messages -->
+            <div class="list-counter" data-id="moved_messages">
+                <span id="tot_moved"></span>
+                <small>Moved</small>
+            </div>
+            <!-- Destination folder not found -->
+            <div class="list-counter" data-id="dest_folder_not_found_messages">
+                <span id="tot_dest_not_found"></span>
+                <small>No destination folder</small>
+            </div>
+            <!-- Related message not found -->
+            <div class="list-counter" data-id="related_msg_not_found_messages">
+                <span id="tot_related_msg_not_found"></span>
+                <small>No related message</small>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="miczReportBody">
 
+
+<div id="miczReportBody" class="container_table">
+<div id="miczMsgMovedList" class="report-message-list"></div>
+<div id="miczDestFolderNotFoundList" class="report-message-list"></div>
+<div id="miczRelatedMsgNotFoundList" class="report-message-list"></div>
 </div>
 <script src="mzsam-report-page.js" type="module"></script>
 </body>
