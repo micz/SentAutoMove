@@ -77,19 +77,27 @@ export class movingEngine {
 
 
     async moveMessages(query_params, account_id = 0){
-        let messages = this.getMessages(messenger.messages.query(query_params));
-        
+        let start_time = performance.now();
+        //set debug option
+        this.logger.changeDebug(samStore.do_debug);
+
         let report_data = {};
+        report_data.report_date = new Date();
         let tot_messages = 0;
         let tot_moved = 0;
         let tot_dest_not_found = 0;
+        let tot_related_msg_not_found = 0;
+
+        let messages = this.getMessages(messenger.messages.query(query_params));
 
         report_data.current_folder = samStore.istb128orgreater ? (await messenger.folders.get(query_params.folderId)).name : query_params.folder.name;
         report_data.current_account_id = account_id;
         report_data.moved_messages = {};
-        report_data.dest_not_found_messages = {};
+        report_data.dest_folder_not_found_messages = {};
+        report_data.related_msg_not_found_messages = {};
 
         for await (let message of messages) {
+          if(tot_messages >= 50) break; // to TEST only few messages
            tot_messages++;
            //console.log(">>>>>>>>>>>> Original message.subject: [" + message.folder.name + "] " + message.subject);
            let related_message = await this.findRelatedMessage(message, account_id);
@@ -111,24 +119,37 @@ export class movingEngine {
               report_data.moved_messages[message.headerMessageId].headerMessageId = message.headerMessageId;
               report_data.moved_messages[message.headerMessageId].dest_folder = dest_folder.name;
               report_data.moved_messages[message.headerMessageId].subject = message.subject;
+              report_data.moved_messages[message.headerMessageId].date = message.date;
             }else{
               tot_dest_not_found++;
               this.logger.log("No dest folder found for [" + message.folder.name + "] " + message.subject + " [" + message.headerMessageId + "]");
-              report_data.dest_not_found_messages[message.headerMessageId] = {}
-              report_data.dest_not_found_messages[message.headerMessageId].headerMessageId = message.headerMessageId;
-              report_data.dest_not_found_messages[message.headerMessageId].relmessage_folder = related_message.folder.name;
-              report_data.dest_not_found_messages[message.headerMessageId].subject = message.subject;
+              report_data.dest_folder_not_found_messages[message.headerMessageId] = {}
+              report_data.dest_folder_not_found_messages[message.headerMessageId].headerMessageId = message.headerMessageId;
+              report_data.dest_folder_not_found_messages[message.headerMessageId].relmessage_folder = related_message.folder.name;
+              report_data.dest_folder_not_found_messages[message.headerMessageId].subject = message.subject;
+              report_data.dest_folder_not_found_messages[message.headerMessageId].date = message.date;
             }
+           }else{ // related message not found
+            tot_related_msg_not_found++;
+            this.logger.log("No related message found for [" + message.folder.name + "] " + message.subject + " [" + message.headerMessageId + "]");
+            report_data.related_msg_not_found_messages[message.headerMessageId] = {}
+            report_data.related_msg_not_found_messages[message.headerMessageId].headerMessageId = message.headerMessageId;
+            report_data.related_msg_not_found_messages[message.headerMessageId].subject = message.subject;
+            report_data.related_msg_not_found_messages[message.headerMessageId].date = message.date;
            }
         }
         // TODO improve messages with single, plural and 0 messages
-        samUtils.showNotification("Sent Auto Move", "Operation completed\n"  + tot_messages + " messages analyzed\n" + tot_moved + " moved\n" + tot_dest_not_found + " not moved: destination folder not found");
-        this.logger.log("Operation completed: " + tot_messages + " messages analyzed, " + tot_moved + " messages moved, " + tot_dest_not_found + " messages not moved: dest folder not found.");
+        samUtils.showNotification("Sent Auto Move", "Operation completed\n"  + tot_messages + " messages analyzed\n" + tot_moved + " moved\n" + tot_dest_not_found + " not moved: destination folder not found" + (tot_related_msg_not_found > 0 ? "\n" + tot_related_msg_not_found + " related messages not found" : ""));
+        this.logger.log("Operation completed: " + tot_messages + " messages analyzed, " + tot_moved + " messages moved, " + tot_dest_not_found + " messages not moved: dest folder not found." + (tot_related_msg_not_found > 0 ? "\n" + tot_related_msg_not_found + " related messages not found" : ""));
         
         let report_id = account_id + "_" +  (new Date()).toLocaleString(undefined,{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).replace(/[-:.,// ]/g, '') + "_" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
         report_data.tot_messages = tot_messages;
         report_data.tot_moved = tot_moved;
         report_data.tot_dest_not_found = tot_dest_not_found;
+        report_data.tot_related_msg_not_found = tot_related_msg_not_found;
+
+        let stop_time = performance.now();
+        report_data.elapsed_time = stop_time - start_time;
 
         await samReport.saveReportData(report_data, report_id);
         if(tot_moved >= this.min_moves_to_report){
@@ -137,17 +158,18 @@ export class movingEngine {
     }
 
 
-    async findRelatedMessage(message, account_id = 0){        // this method finds the message related to the one passed to it
+    // this method finds the message related to the one passed to it
+    async findRelatedMessage(message, account_id = 0){
 
       let fullMsg = await messenger.messages.getFull(message.id);
       // console.log(">>>>>>>>>>>> fullMsg: " + JSON.stringify(fullMsg.headers));
       let inReplyToHeaders = fullMsg.headers['in-reply-to'];
-      //console.log(">>>>>>>>>>>> inReplyToHeaders: " + inReplyToHeaders);
+      this.logger.log("inReplyToHeaders: " + inReplyToHeaders);
 
+      // inReplyToHeaders = undefined;
       if(inReplyToHeaders != undefined){
         let query_params = {
           headerMessageId: Array.isArray(inReplyToHeaders) ? inReplyToHeaders[0].replace(/^<|>$/g, '') : inReplyToHeaders.replace(/^<|>$/g, ''),
-          // the search should be limited to the current account (with an option to choose if limiting to the current account or all accounts)
         }
 
         let found_messages = null;
@@ -163,16 +185,107 @@ export class movingEngine {
 
         if(found_messages == null) found_messages = this.getMessages(messenger.messages.query(query_params));
 
-        // TODO check also the header "References" see https://www.jwz.org/doc/threading.html
-        // and "Thread-Index": see https://managing.blue/2007/12/11/trying-to-make-use-of-outlooks-thread-index-header/
-
         for await (let found_msg of found_messages) {
-          this.logger.log("Related found_msg.subject: [" + found_msg.folder.name + "] " + found_msg.subject + " [" + message.headerMessageId + "]");
+          this.logger.log("[in-reply-to] Related found_msg.subject: [" + found_msg.folder.name + "] " + found_msg.subject + " [" + message.headerMessageId + "]");
           // get only the first one at the moment
           return found_msg;
         }
       }
+
+      // We found nothing, check the header "references" see https://www.jwz.org/doc/threading.html
+      let referencesHeaders = fullMsg.headers['references'];
+      // console.log(">>>>>> fullMsg.headers: " + JSON.stringify(fullMsg.headers));
+      this.logger.log("referencesHeaders: " + referencesHeaders);
+      let referenceIDs = this.extractReferencesIDs(referencesHeaders);
+
+      // referencesHeaders = undefined;
+      if(referencesHeaders != undefined){
+        for (let referenceID of referenceIDs) {
+          this.logger.log("referenceID: " + referenceID);
+          // Construct query_params for each value
+          let query_params = {
+            headerMessageId: referenceID,
+          };
+
+          let found_messages = null;
+          //only from this account
+          if(this.do_only_same_account){
+            if(samStore.istb128orgreater){  //TB128
+              //query_params.accountId = samUtils.getFolderAccountId(message.folder);
+              query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder));
+            }else{  // TB 115
+              found_messages = this.getAccountMessages(query_params, account_id);
+            }
+          }
+
+          if(found_messages == null) found_messages = this.getMessages(messenger.messages.query(query_params));
+
+          for await (let found_msg of found_messages) {
+            this.logger.log("[References] Related found_msg.subject: [" + found_msg.folder.name + "] " + found_msg.subject + " [" + message.headerMessageId + "]");
+            // get only the first one at the moment
+            return found_msg;
+          }
+        }
+      }
+
+      // we found nothing, try "Thread-Index": see https://managing.blue/2007/12/11/trying-to-make-use-of-outlooks-thread-index-header/
+      // this is an event invite and response, so the message sent from the account is one-to-one
+      let thread_indexHeaders = fullMsg.headers['thread-index'];
+      this.logger.log("threadindexHeaders: " + JSON.stringify(thread_indexHeaders));
+      //console.log(">>>>>> message: " + JSON.stringify(message));
+      if(thread_indexHeaders != undefined){
+        thread_indexHeaders = thread_indexHeaders[0].substring(0, 28);
+        let query_params = {  // get only messages from the recipient of the current message and sent from the current account
+          recipients: message.author,
+          author: message.recipients[0],
+          subject: samUtils.extractInviteSubject(message.subject),  // this is an invite response
+        }
+
+        let found_messages = null;
+        //only from this account
+        if(this.do_only_same_account){
+          if(samStore.istb128orgreater){  //TB128
+            //query_params.accountId = samUtils.getFolderAccountId(message.folder);
+            query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder));
+          }else{  // TB 115
+            found_messages = this.getAccountMessages(query_params, account_id);
+          }
+        }
+
+        if(found_messages == null) found_messages = this.getMessages(messenger.messages.query(query_params));
+
+        for await (let found_msg of found_messages) {
+          let fullFoundMsg = await messenger.messages.getFull(found_msg.id);
+          let found_thread_indexHeaders = fullFoundMsg.headers['thread-index'];
+          if(found_thread_indexHeaders == undefined) continue;
+          found_thread_indexHeaders = found_thread_indexHeaders[0].substring(0, 28);
+          if(found_thread_indexHeaders == thread_indexHeaders){
+            this.logger.log("[thread-index] Related found_msg.subject: [" + found_msg.folder.name + "] " + found_msg.subject + " [" + message.headerMessageId + "]");
+            // get only the first one at the moment
+            return found_msg;
+          }
+        }
+      }
+
+
+      // we found nothing, so return false
       return false;
+    }
+
+    extractReferencesIDs(references){
+      // Regular expression to match text inside <>
+      const regex = /<([^>]+)>/g;
+
+      // Array to store extracted values
+      const extractedValues = [];
+
+      // Use regex to find matches and add them to the array
+      let match;
+      while ((match = regex.exec(references)) !== null) {
+        extractedValues.push(match[1]);
+      }
+
+      return extractedValues;
     }
 
     async getDestSubFolder(message, prefix){
