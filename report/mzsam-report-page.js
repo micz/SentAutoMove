@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setValue("tot_moved", report.tot_moved);
     setValue("tot_dest_not_found", report.tot_dest_not_found);
     setValue("tot_related_msg_not_found", report.tot_related_msg_not_found);
-    setValue("report_date", report.report_date);
+    setValue("report_date", samUtils.formatDateString(report.report_date));
     setValue("elapsed_time", samUtils.convertFromMilliseconds(report.elapsed_time));
 
     if(Object.keys(report.moved_messages).length > 0) renderReport(1,report.moved_messages, document.getElementById('miczMsgMovedList'));
@@ -168,8 +168,8 @@ function renderReport(type, dataList, containerDiv) {
   // Append header cells to the header row
   headerRow.appendChild(headerMessageId);
   headerRow.appendChild(headerDate);
-  if(type != 3) headerRow.appendChild(headerDestFolder);
   headerRow.appendChild(headerSubject);
+  if(type != 3) headerRow.appendChild(headerDestFolder);
 
   // Append the header row to the table div
   tableDiv.appendChild(headerRow);
@@ -190,7 +190,7 @@ function renderReport(type, dataList, containerDiv) {
 
           const dateCell = document.createElement('div');
           dateCell.className = 'table-cell';
-          dateCell.textContent = message.date;
+          dateCell.textContent = samUtils.formatDateString(message.date);
 
           let destFolderCell = null;
 
