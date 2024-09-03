@@ -18,6 +18,12 @@
   "prefs_OptionText_dest_folder_type_info": {
     "message": "Choose whether to move the mails to a subfolder or the same folder."
   },
+  "prefs_OptionText_warn_before_run": {
+    "message": "Warn before running"
+  },
+  "prefs_OptionText_warn_before_run_info": {
+    "message": "Warn the user before running the moving operation."
+  },
   "prefs_OptionText_dest_folder_prefix": {
     "message": "Subfolder prefix"
   },
@@ -36,6 +42,12 @@
   "prefs_OptionText_do_only_sent_info": {
     "message": "Consider only mails that are sent by the account owner of the considered folder."
   },
+  "prefs_OptionText_do_only_sent_folders": {
+    "message": "\"Sent\" type folders only"
+  },
+  "prefs_OptionText_do_only_sent_folders_info": {
+    "message": "Consider only folders that are marked as \"Sent\" type. Otherwise give a warning to the user."
+  },
   "prefs_OptionText_ignore_archive_folders": {
     "message": "Ignore archive folders"
   },
@@ -43,13 +55,22 @@
     "message": "Do not search for related mails that are in archive folders."
   },
   "prefs_OptionText_min_moves_to_report": {
-    "message": "Minimum mails moved to report"
+    "message": "Min number of mails moved to report"
   },
   "prefs_OptionText_min_moves_to_report_info": {
-    "message": "Set the minimum number of mail moved to generate a report in a new tab."
+    "message": "Set the minimum number of mails moved to generate a report in a new tab."
   },
   "prefs_OptionText_min_moves_to_report_info_2": {
     "message": "(0 = Always)"
+  },
+  "prefs_OptionText_max_messages_moved": {
+    "message": "Max number of mails to move"
+  },
+  "prefs_OptionText_max_messages_moved_info": {
+    "message": "Set the maximum number of mails to move in a single operation."
+  },
+  "prefs_OptionText_max_messages_moved_info_2": {
+    "message": "(0 = Move all mails every time)"
   },
   "prefs_OptionText_do_debug": {
     "message": "Enable Debug Mode"
