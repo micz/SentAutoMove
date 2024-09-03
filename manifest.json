@@ -33,7 +33,8 @@
     },
     "default_locale": "en",
     "browser_action": {
-        "default_title": "Check Folder",
-        "default_icon": "images/icon-32px.png"
+        "default_title": "SAM: Idle",
+        "default_icon": "images/icon-32px.png",
+        "default_popup": "popup/mzsam-popup.html"
     }
 }
