@@ -16,13 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import { movingEngine } from "./js/mzsam-moving-engine.js";
 import { samUtils } from "./js/mzsam-utils.js";
 import { samStore } from "./js/mzsam-store.js";
 import { samPrefs } from "./js/mzsam-options.js";
 import { prefs_default } from "./js/mzsam-options-default.js";
-//import { samLogger } from "./js/mzsam-logger.js";
+import { samLogger } from "./js/mzsam-logger.js";
+
 
 // messenger.messages.onNewMailReceived.addListener(async (folder, messages) => {
 //     console.log("onNewMailReceived folder: ", folder.name);
@@ -41,14 +41,59 @@ import { prefs_default } from "./js/mzsam-options-default.js";
 
 samStore.istb128orgreater = await samUtils.isThunderbird128OrGreater();
 samStore.do_debug = await samPrefs.getPref("do_debug");
-//let samLog = new samLogger("mzsam-background.js");
+let samLog = new samLogger("mzsam-background.js");
 
 
-browser.browserAction.onClicked.addListener(async () => {
+// browser.browserAction.onClicked.addListener(async () => {
+//     let prefs = await samPrefs.getPrefs(Object.keys(prefs_default));
+//     samStore.do_debug = prefs.do_debug;
+
+//     let folder = await samUtils.getCurrentTabFolder();
+//     if(prefs.do_only_sent_folders && !["sent"].includes(folder.type)) {
+//         samUtils.showNotification("Warning!", "This is not a \"sent\" folder!\r\nIf you want to run on any folder, change the preference in the options page.");
+//         return;
+//     }
+//     let params = {};
+//     for (let key of Object.keys(prefs)) {
+//         params[key] = prefs[key];
+//     }
+
+//     let mvEngine = new movingEngine(params);
+//     await mvEngine.checkFolder(folder);
+//   });
+
+// browser.browserAction.onClicked.addListener(async () => {
+//     run();
+//   });
+
+messenger.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+    // Check what type of message we have received and invoke the appropriate
+    // handler function.
+    if (message && message.hasOwnProperty("command")){
+        switch (message.command) {
+            case "sam_run":
+                run();
+                break;
+            default:
+                break;
+        }
+    }
+});
+
+
+async function run(){
+    samLog.log("Starting...");
+    samUtils.setPopupMessage("Starting...");
+    samStore.setSessionData("is_running", true);
     let prefs = await samPrefs.getPrefs(Object.keys(prefs_default));
     samStore.do_debug = prefs.do_debug;
 
     let folder = await samUtils.getCurrentTabFolder();
+    if(prefs.do_only_sent_folders && !["sent"].includes(folder.type)) {
+        samUtils.showNotification("Warning!","This is not a \"sent\" folder!\r\nIf you want to run on any folder, change the preference in the options page.");
+        samUtils.setPopupMessage("Idle");
+        return;
+    }
     let params = {};
     for (let key of Object.keys(prefs)) {
         params[key] = prefs[key];
@@ -56,4 +101,7 @@ browser.browserAction.onClicked.addListener(async () => {
 
     let mvEngine = new movingEngine(params);
     await mvEngine.checkFolder(folder);
-  });
+    samStore.setSessionData("is_running", false);
+    samLog.log("Operation completed!");
+    samUtils.setPopupMessage("Operation completed!");
+}
