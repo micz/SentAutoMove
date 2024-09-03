@@ -20,4 +20,15 @@
 export const samStore = {
     'do_debug': false,
     'istb128orgreater': false,
+
+    async setSessionData (key, value) {
+        let obj = {};
+        obj[key] = value;
+        await browser.storage.session.set(obj);
+    },
+
+    async getSessionData (key) {
+        let output = await browser.storage.session.get(key);
+        return output[key];
+    },
 };
