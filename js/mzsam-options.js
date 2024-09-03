@@ -99,6 +99,7 @@ export const samPrefs = {
             if (element.value === '') {
               element.selectedIndex = -1;
             }
+            element.dispatchEvent(new Event('change'));
           }else{
             samPrefs.logger.log('Unhandled input type:', element.type);
           }
