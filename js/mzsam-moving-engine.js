@@ -32,6 +32,7 @@ export class movingEngine {
   dest_folder_prefix = '';
   ignore_archive_folders = true;
   min_moves_to_report = 0;
+  max_messages_moved = 0;
 
     // async sentMessageListener(sendInfo){
     //   if((sendInfo.mode == "sendNow") && (sendInfo.headerMessageId != undefined) && (sendInfo.headerMessageId != '')){
@@ -55,6 +56,7 @@ export class movingEngine {
       this.dest_folder_prefix = params.dest_folder_prefix;
       this.ignore_archive_folders = params.ignore_archive_folders;
       this.min_moves_to_report = params.min_moves_to_report;
+      this.max_messages_moved = params.max_messages_moved;
     }
 
 
@@ -72,11 +74,12 @@ export class movingEngine {
       }
       
       this.logger.log("Checking folder [" + folder.name + "]");
-      this.moveMessages(query_params, samUtils.getFolderAccountId(folder));
+      await this.moveMessages(query_params, samUtils.getFolderAccountId(folder));
     }
 
 
-    async moveMessages(query_params, account_id = 0){
+    async moveMessages(query_params, account_id){
+        samUtils.setPopupMessage("SAM: Starting...");
         let start_time = performance.now();
         //set debug option
         this.logger.changeDebug(samStore.do_debug);
@@ -88,6 +91,8 @@ export class movingEngine {
         let tot_dest_not_found = 0;
         let tot_related_msg_not_found = 0;
 
+        let account_emails = await samUtils.getAccountEmails(account_id);
+
         let messages = this.getMessages(messenger.messages.query(query_params));
 
         report_data.current_folder = samStore.istb128orgreater ? (await messenger.folders.get(query_params.folderId)).name : query_params.folder.name;
@@ -97,7 +102,25 @@ export class movingEngine {
         report_data.related_msg_not_found_messages = {};
 
         for await (let message of messages) {
+          samUtils.setPopupMessage("SAM: [" + tot_messages + "] Running...");
           if(tot_messages >= 50) break; // to TEST only few messages
+          if((this.max_messages_moved > 0) && (tot_messages >= this.max_messages_moved)){
+            this.logger.log("Max number of messages to move reached, stopping...");
+            break;
+          }
+          // console.log(">>>>>>>>>> this.do_only_sent: " + this.do_only_sent);
+          if(this.do_only_sent){
+            const match_author = message.author.match(samUtils.regexEmail);
+            if (match_author) {
+              const key_author = match_author[0].toLowerCase();
+              // console.log(">>>>>>>>>> key_author: " + key_author);
+              // console.log(">>>>>>>>>> account_emails: " + JSON.stringify(account_emails));
+              if(!account_emails.includes(key_author)) {
+                this.logger.log("Account is not the author, skipping message [" + message.subject + "] [" + message.headerMessageId + "]");
+                continue;
+              }
+            }
+          }
            tot_messages++;
            //console.log(">>>>>>>>>>>> Original message.subject: [" + message.folder.name + "] " + message.subject);
            let related_message = await this.findRelatedMessage(message, account_id);
@@ -138,6 +161,7 @@ export class movingEngine {
             report_data.related_msg_not_found_messages[message.headerMessageId].date = message.date;
            }
         }
+        samUtils.setPopupMessage("SAM: Completed!");
         // TODO improve messages with single, plural and 0 messages
         samUtils.showNotification("Sent Auto Move", "Operation completed\n"  + tot_messages + " messages analyzed\n" + tot_moved + " moved\n" + tot_dest_not_found + " not moved: destination folder not found" + (tot_related_msg_not_found > 0 ? "\n" + tot_related_msg_not_found + " related messages not found" : ""));
         this.logger.log("Operation completed: " + tot_messages + " messages analyzed, " + tot_moved + " messages moved, " + tot_dest_not_found + " messages not moved: dest folder not found." + (tot_related_msg_not_found > 0 ? "\n" + tot_related_msg_not_found + " related messages not found" : ""));
