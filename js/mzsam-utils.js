@@ -22,6 +22,8 @@ import { samStore } from "./mzsam-store.js";
 
 export const samUtils = {
 
+  regexEmail: /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/,
+
   async isThunderbird128OrGreater(){
       try {
         const info = await browser.runtime.getBrowserInfo();
@@ -45,8 +47,15 @@ export const samUtils = {
         if (v1part < v2part) return -1;
       }
       return 0;
-    },
+  },
 
+  setPopupMessage(message){
+    samStore.setSessionData("popupMessage", message);
+  },
+
+  async getPopupMessage(){
+    return await samStore.getSessionData("popupMessage");
+  },
 
   // Function to get the folder associated with the current tab
   async getCurrentTabFolder() {
@@ -61,9 +70,8 @@ export const samUtils = {
       let folder = currentTab.displayedFolder;
       let accountId = folder.accountId;
 
-
-      console.log("Account ID:", accountId);
-      console.log("Folder:", folder);
+      // console.log("Account ID:", accountId);
+      // console.log("Folder:", folder);
 
       return folder;
     } else {
@@ -164,13 +172,19 @@ export const samUtils = {
     }
   },
 
-  showNotification(title, message) {
-    browser.notifications.create(null,{
+  async showNotification(title, message, dismissTime = 10000) {
+    let notificationID = await browser.notifications.create(null,{
         "type": "basic",
         "title": title,
         //"iconUrl": browser.runtime.getURL("images/icon.png"),
         "message": message
     });
+
+    if(dismissTime > 0) {
+      setTimeout(() => {
+        browser.notifications.clear(notificationID);
+      }, dismissTime);
+    }
   },
 
   extractInviteSubject(inputString) {
@@ -210,5 +224,25 @@ export const samUtils = {
 
     return result.trim();
   },
+
+  formatDateString(date, locale = undefined) {
+    // Format the date part
+    const formattedDate = date.toLocaleDateString(locale, {
+      weekday: 'long',  // Full name of the day (e.g., "martedì")
+      day: 'numeric',   // Day of the month (e.g., "3")
+      month: 'long',    // Full name of the month (e.g., "settembre")
+      year: 'numeric'   // Four-digit year (e.g., "2024")
+    });
+  
+    // Format the time part
+    const formattedTime = date.toLocaleTimeString(locale, {
+      hour: '2-digit',   // Two-digit hour (e.g., "14")
+      minute: '2-digit', // Two-digit minute (e.g., "54")
+      hour12: false      // Use 24-hour time format
+    });
+  
+    // Combine date and time
+    return `${formattedDate} - ${formattedTime}`;
+  }
 
 }
