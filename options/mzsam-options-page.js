@@ -24,18 +24,20 @@ import { samPrefs } from "../js/mzsam-options.js";
 document.addEventListener('DOMContentLoaded', async () => {
     samStore.do_debug = await samPrefs.getPref("do_debug");
     samPrefs.logger = new samLogger("mzsam-options", samStore.do_debug);
+
+    let destfoldertype_select = document.getElementById("dest_folder_type");
+    destfoldertype_select.addEventListener("change", showDestFolderOptions);
+
     samPrefs.restoreOptions();
     i18n.updateDocument();
     document.querySelectorAll(".option-input").forEach(element => {
       element.addEventListener("change", samPrefs.saveOptions);
     });
-    showDestFolderOptions();
-    let destfoldertype_select = document.getElementById("dest_folder_type");
-    destfoldertype_select.addEventListener("change", showDestFolderOptions);
   }, { once: true });
   
   function showDestFolderOptions(){
     let destfoldertype_select = document.getElementById("dest_folder_type");
+    console.log(">>>>>>>>>>>>> destfoldertype_select.value: " + destfoldertype_select.value);
     let show_prefix = (destfoldertype_select.value === "subfolder") ? "table-row" : "none";
     
     document.querySelectorAll(".dest_folder_type_subfolder").forEach(element => {
