@@ -127,3 +127,9 @@ body {
 .report-message-list{
     display: none;
 }
+
+.report_icon{
+    position: relative;
+    top: 0.5em;
+    margin-right: 0.3em;
+}
