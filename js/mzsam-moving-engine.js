@@ -79,7 +79,7 @@ export class movingEngine {
 
 
     async moveMessages(query_params, account_id){
-        samUtils.setPopupMessage("SAM: Starting...");
+        samUtils.setPopupStarting();
         let start_time = performance.now();
         //set debug option
         this.logger.changeDebug(samStore.do_debug);
@@ -102,7 +102,7 @@ export class movingEngine {
         report_data.related_msg_not_found_messages = {};
 
         for await (let message of messages) {
-          samUtils.setPopupMessage("SAM: [" + tot_messages + "] Running...");
+          samUtils.setPopupRunning(tot_messages);
           if(tot_messages >= 50) break; // to TEST only few messages
           if((this.max_messages_moved > 0) && (tot_messages >= this.max_messages_moved)){
             this.logger.log("Max number of messages to move reached, stopping...");
@@ -161,7 +161,7 @@ export class movingEngine {
             report_data.related_msg_not_found_messages[message.headerMessageId].date = message.date;
            }
         }
-        samUtils.setPopupMessage("SAM: Completed!");
+        samUtils.setPopupCompleted();
         // TODO improve messages with single, plural and 0 messages
         samUtils.showNotification("Sent Auto Move", "Operation completed\n"  + tot_messages + " messages analyzed\n" + tot_moved + " moved\n" + tot_dest_not_found + " not moved: destination folder not found" + (tot_related_msg_not_found > 0 ? "\n" + tot_related_msg_not_found + " related messages not found" : ""));
         this.logger.log("Operation completed: " + tot_messages + " messages analyzed, " + tot_moved + " messages moved, " + tot_dest_not_found + " messages not moved: dest folder not found." + (tot_related_msg_not_found > 0 ? "\n" + tot_related_msg_not_found + " related messages not found" : ""));
