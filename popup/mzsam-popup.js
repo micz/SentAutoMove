@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(!await samStore.getSessionData('is_running')){
         let warn_before_run = await samPrefs.getPref("warn_before_run");
         if(warn_before_run) {
-            if(confirm("Do you want to run in this folder?")){  //TODO
-                browser.runtime.sendMessage({ command: 'sam_run' });
-            }
+            // TODO
         }else{
+            samUtils.setPopupStarting();
+            setMessage(await samUtils.getPopupMessage());
             browser.runtime.sendMessage({ command: 'sam_run' });
             setContinuousMessageUpdate();
         }
@@ -52,7 +52,8 @@ function setMessage(message) {
     document.getElementById("miczMessage").innerText = message;
 }
 
-function setContinuousMessageUpdate() {
+async function setContinuousMessageUpdate() {
+    setMessage(await samUtils.getPopupMessage());
     updateInterval = setInterval(async () => {
         setMessage(await samUtils.getPopupMessage());
     }, 2000);
