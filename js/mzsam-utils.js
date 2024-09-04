@@ -57,6 +57,41 @@ export const samUtils = {
     return await samStore.getSessionData("popupMessage");
   },
 
+  setPopupIdle(){
+    samUtils.setPopupMessage("SAM: Idle");
+    browser.browserAction.setIcon({path: "images/icon.png"});
+  },
+
+  setPopupStarting(){
+    samUtils.setPopupMessage("SAM: Starting...");
+    browser.browserAction.setIcon({path: "images/icon-running.png"});
+  },
+
+  setPopupRunning(count){
+    samUtils.setPopupMessage("SAM: [" + count + "] Running...");
+    browser.browserAction.setIcon({path: "images/icon-running.png"});
+  },
+
+  setPopupCompleted(){
+    samUtils.setPopupMessage("SAM: Completed!");
+    browser.browserAction.setIcon({path: "images/icon-completed.png"});
+  },
+
+  async showNotification(title, message, dismissTime = 10000) {
+    let notificationID = await browser.notifications.create(null,{
+        "type": "basic",
+        "title": title,
+        "iconUrl": browser.runtime.getURL("images/icon.png"),
+        "message": message
+    });
+
+    if(dismissTime > 0) {
+      setTimeout(() => {
+        browser.notifications.clear(notificationID);
+      }, dismissTime);
+    }
+  },
+
   // Function to get the folder associated with the current tab
   async getCurrentTabFolder() {
     // Get all currently open tabs
@@ -172,21 +207,6 @@ export const samUtils = {
     }
   },
 
-  async showNotification(title, message, dismissTime = 10000) {
-    let notificationID = await browser.notifications.create(null,{
-        "type": "basic",
-        "title": title,
-        //"iconUrl": browser.runtime.getURL("images/icon.png"),
-        "message": message
-    });
-
-    if(dismissTime > 0) {
-      setTimeout(() => {
-        browser.notifications.clear(notificationID);
-      }, dismissTime);
-    }
-  },
-
   extractInviteSubject(inputString) {
     // Controlla se la stringa contiene ':'
     if (inputString.includes(':')) {
@@ -202,7 +222,7 @@ export const samUtils = {
     const hours = Math.floor(milliseconds / 3600000);
     const minutes = Math.floor((milliseconds % 3600000) / 60000);
     const seconds = Math.floor((milliseconds % 60000) / 1000);
-    const remainingMilliseconds = milliseconds % 1000;
+    //const remainingMilliseconds = milliseconds % 1000;
     
     let result = '';
 
@@ -218,9 +238,9 @@ export const samUtils = {
         result += seconds + 's ';
     }
 
-    if (remainingMilliseconds !== 0) {
-        result += remainingMilliseconds + 'ms';
-    }
+    // if (remainingMilliseconds !== 0) {
+    //     result += remainingMilliseconds + 'ms';
+    // }
 
     return result.trim();
   },
