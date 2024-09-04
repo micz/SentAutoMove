@@ -41,7 +41,7 @@ import { samLogger } from "./js/mzsam-logger.js";
 
 samStore.istb128orgreater = await samUtils.isThunderbird128OrGreater();
 samStore.do_debug = await samPrefs.getPref("do_debug");
-let samLog = new samLogger("mzsam-background.js");
+let samLog = new samLogger("mzsam-background", samStore.do_debug);
 
 
 // browser.browserAction.onClicked.addListener(async () => {
@@ -83,7 +83,7 @@ messenger.runtime.onMessage.addListener(async (message, sender, sendResponse) =>
 
 async function run(){
     samLog.log("Starting...");
-    samUtils.setPopupMessage("Starting...");
+    samUtils.setPopupStarting();
     samStore.setSessionData("is_running", true);
     let prefs = await samPrefs.getPrefs(Object.keys(prefs_default));
     samStore.do_debug = prefs.do_debug;
@@ -91,7 +91,7 @@ async function run(){
     let folder = await samUtils.getCurrentTabFolder();
     if(prefs.do_only_sent_folders && !["sent"].includes(folder.type)) {
         samUtils.showNotification("Warning!","This is not a \"sent\" folder!\r\nIf you want to run on any folder, change the preference in the options page.");
-        samUtils.setPopupMessage("Idle");
+        samUtils.setPopupIdle();
         return;
     }
     let params = {};
@@ -103,5 +103,5 @@ async function run(){
     await mvEngine.checkFolder(folder);
     samStore.setSessionData("is_running", false);
     samLog.log("Operation completed!");
-    samUtils.setPopupMessage("Operation completed!");
+    samUtils.setPopupCompleted();
 }
