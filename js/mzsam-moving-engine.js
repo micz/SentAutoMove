@@ -31,7 +31,7 @@ export class movingEngine {
   dest_folder_type = '';
   dest_folder_prefix = '';
   ignore_archive_folders = true;
-  min_moves_to_report = 0;
+  min_moves_to_open_report_tab = 0;
   max_messages_moved = 0;
 
     // async sentMessageListener(sendInfo){
@@ -55,7 +55,7 @@ export class movingEngine {
       this.dest_folder_type = params.dest_folder_type;
       this.dest_folder_prefix = params.dest_folder_prefix;
       this.ignore_archive_folders = params.ignore_archive_folders;
-      this.min_moves_to_report = params.min_moves_to_report;
+      this.min_moves_to_open_report_tab = params.min_moves_to_open_report_tab;
       this.max_messages_moved = params.max_messages_moved;
     }
 
@@ -103,8 +103,7 @@ export class movingEngine {
 
         for await (let message of messages) {
           samUtils.setPopupRunning(tot_messages);
-          if(tot_messages >= 50) break; // to TEST only few messages
-          if((this.max_messages_moved > 0) && (tot_messages >= this.max_messages_moved)){
+          if((this.max_messages_moved > 0) && (tot_moved >= this.max_messages_moved)){
             this.logger.log("Max number of messages to move reached, stopping...");
             break;
           }
@@ -135,7 +134,9 @@ export class movingEngine {
                 break;
             }
             if(dest_folder !== false){
-              //await messenger.messages.move([message.id], samUtils.getParameter(dest_folder));  //commented out for testing
+              // ================================ The following line has to be commented out for testing ================================
+              // await messenger.messages.move([message.id], samUtils.getParameter(dest_folder));
+              // ========================================================================================================================
               tot_moved++;
               this.logger.log("Moving [" + message.subject + "] to [" + dest_folder.name + "] [" + message.headerMessageId + "]");
               report_data.moved_messages[message.headerMessageId] = {}
@@ -162,11 +163,21 @@ export class movingEngine {
            }
         }
         samUtils.setPopupCompleted();
-        // TODO improve messages with single, plural and 0 messages
-        samUtils.showNotification("Sent Auto Move", "Operation completed\n"  + tot_messages + " messages analyzed\n" + tot_moved + " moved\n" + tot_dest_not_found + " not moved: destination folder not found" + (tot_related_msg_not_found > 0 ? "\n" + tot_related_msg_not_found + " related messages not found" : ""));
+        const notificationTitle = browser.i18n.getMessage("sentAutoMoveTitle");
+        const operationCompletedText = browser.i18n.getMessage("operationCompleted");
+
+        const messagesAnalyzedText = samUtils.getLocalizedMessage("messagesAnalyzed", tot_messages);
+        const messagesMovedText = samUtils.getLocalizedMessage("messagesMoved", tot_moved);
+        const messagesNotMovedText = samUtils.getLocalizedMessage("messagesNotMoved", tot_dest_not_found);
+        const relatedMessagesNotFoundText = tot_related_msg_not_found > 0 ? samUtils.getLocalizedMessage("relatedMessagesNotFound", tot_related_msg_not_found) : '';
+
+        const notificationMessage = `${operationCompletedText}\n${messagesAnalyzedText}\n${messagesMovedText}\n${messagesNotMovedText}${relatedMessagesNotFoundText ? '\n' + relatedMessagesNotFoundText : ''}`;
+        samUtils.showNotification(notificationTitle, notificationMessage);
+
         this.logger.log("Operation completed: " + tot_messages + " messages analyzed, " + tot_moved + " messages moved, " + tot_dest_not_found + " messages not moved: dest folder not found." + (tot_related_msg_not_found > 0 ? "\n" + tot_related_msg_not_found + " related messages not found" : ""));
         
         let report_id = account_id + "_" +  (new Date()).toLocaleString(undefined,{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).replace(/[-:.,// ]/g, '') + "_" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        report_data.report_id = report_id;
         report_data.tot_messages = tot_messages;
         report_data.tot_moved = tot_moved;
         report_data.tot_dest_not_found = tot_dest_not_found;
@@ -176,7 +187,7 @@ export class movingEngine {
         report_data.elapsed_time = stop_time - start_time;
 
         await samReport.saveReportData(report_data, report_id);
-        if(tot_moved >= this.min_moves_to_report){
+        if(tot_moved >= this.min_moves_to_open_report_tab){
           samReport.openReportTab(report_id);
         }
     }
