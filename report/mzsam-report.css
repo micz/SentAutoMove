@@ -1,8 +1,8 @@
 /* General body styles */
 body {
-    font-family: Arial, sans-serif; /* Simple and clear font */
-    background-color: #f5f5f5; /* Light background color */
-    color: #333; /* Dark grey text */
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
     margin: 0;
     padding: 0;
 }
@@ -11,17 +11,17 @@ body {
 .container {
     width: 80%;
     max-width: 600px;
-    margin: 40px auto; /* Centered with top and bottom margin */
+    margin: 40px auto;
     padding: 20px;
-    background-color: #fff; /* White background for content */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Section styles */
 .section {
-    margin-bottom: 20px; /* Space between sections */
+    margin-bottom: 20px;
 }
 
 /* Section title styles */
@@ -29,30 +29,30 @@ body {
     font-weight: bold;
     font-size: 1.2em;
     margin-bottom: 10px;
-    color: #1a73e8; /* Blue color similar to Thunderbird theme */
+    color: #1a73e8;
 }
 
 /* Information block styles */
 .info {
     padding: 10px;
-    background-color: #e8f0fe; /* Light blue background */
-    border-left: 4px solid #1a73e8; /* Left border */
+    background-color: #e8f0fe;
+    border-left: 4px solid #1a73e8;
     margin-bottom: 10px;
 }
 
 /* Message section styles */
 .messages {
-    margin-top: 20px; /* Space above the message counts */
+    margin-top: 20px;
 }
 
 /* Total message count styles */
 .total {
     text-align: center;
     padding: 15px;
-    background-color: #e0e0e0; /* Light grey background for total */
-    border-radius: 5px; /* Rounded corners */
-    margin-bottom: 20px; /* Space below the total */
-    font-size: 1.8em; /* Larger font size for emphasis */
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 1.8em;
     font-weight: bold;
 }
 
@@ -62,7 +62,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #f1f3f4; /* Light grey background */
+    background-color: #f1f3f4;
     border-radius: 5px;
 }
 
@@ -78,8 +78,8 @@ body {
 }
 
 .list-counter small {
-    font-size: 0.9em; /* Smaller font for labels */
-    color: #555; /* Slightly lighter grey */
+    font-size: 0.9em;
+    color: #555;
 }
 
 .pointer{
@@ -88,10 +88,10 @@ body {
 
 .container_table {
     width: 95%;
-    background-color: #fff; /* White background for content */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin:auto;
     display: flex;
     text-align: center;
