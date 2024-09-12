@@ -16,6 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { i18n } from "../js/mzsam-i18n.js";
+
 document.addEventListener('DOMContentLoaded', () => {
   i18n.updateDocument();
 }, { once: true });
