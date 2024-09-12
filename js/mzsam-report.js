@@ -79,6 +79,7 @@ export const samReport = {
     },
 
     sortReportsByDate(data) {
+        if(data == undefined) return undefined;
         const reportKeys = Object.keys(data);
         reportKeys.sort((a, b) => {
             const dateA = new Date(data[a].report_date);
