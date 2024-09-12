@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('btnManageReports').addEventListener('click', async () => {
     let report_data = await samReport.getAllReportData();
     report_data = samReport.sortReportsByDate(report_data);
-    console.log(">>>>>>>>>>>>> report_data: " + JSON.stringify(report_data));
+    // console.log(">>>>>>>>>>>>> report_data: " + JSON.stringify(report_data));
     populateTable(report_data);
     document.getElementById("table-reports-container").style.display = "flex";
     document.getElementById('btnManageReports').style.display = "none";
