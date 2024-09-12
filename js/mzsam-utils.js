@@ -77,6 +77,14 @@ export const samUtils = {
     browser.browserAction.setIcon({path: "images/icon-completed.png"});
   },
 
+  setCurrentFolderInfo(folder_info){
+    samStore.setSessionData("currentFolder", folder_info);
+  },
+
+  async getCurrentFolderInfo(){
+    return await samStore.getSessionData("currentFolder");
+  },
+
   async showNotification(title, message, dismissTime = 10000) {
     let notificationID = await browser.notifications.create(null,{
         "type": "basic",
@@ -258,11 +266,17 @@ export const samUtils = {
     const formattedTime = date.toLocaleTimeString(locale, {
       hour: '2-digit',   // Two-digit hour (e.g., "14")
       minute: '2-digit', // Two-digit minute (e.g., "54")
+      second: '2-digit', // Two-digit second (e.g., "09")
       hour12: false      // Use 24-hour time format
     });
   
     // Combine date and time
     return `${formattedDate} - ${formattedTime}`;
-  }
+  },
+
+  getLocalizedMessage(key, count) {
+    const messageKey = count === 1 ? key : `${key}_plural`;
+    return browser.i18n.getMessage(messageKey, [count.toString()]);
+  },
 
 }
