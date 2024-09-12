@@ -65,6 +65,87 @@ input[type="number"] {
     width: 60px;
 }
 
+#reports_store {
+    font-size: 13px;
+    border-spacing: 0px;
+}
+
+#btn_reports{
+    text-align: center;
+    width: 100%;
+    margin: 10px 0px;
+}
+
+#storedReportsTitle {
+    display: none;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+#table-reports-container {
+    width: 100%;
+    display: none;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.2em;
+  }
+
+.table-reports {
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.table-reports th,
+.table-reports td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+.table-reports th {
+    background-color: #e0e0e0;
+    color: #333;
+    font-weight: bold;
+}
+
+.table-reports tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+  
+.table-reports tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+#btnDeleteReports {
+    margin-top: 20px;
+    padding: 5px 10px;
+    background-color: #ff2a2a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+#btnDeleteReports:hover {
+    background-color: #f85050;
+}
+
+.report_link_img{
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.last10reports{
+    font-style: italic;
+    font-size: 0.8em;
+}
+
 @media (prefers-color-scheme: dark) {
     body {
         background-color: rgb(35, 34, 43);
