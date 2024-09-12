@@ -74,12 +74,19 @@ messenger.runtime.onMessage.addListener(async (message, sender, sendResponse) =>
             case "sam_run":
                 run();
                 break;
+            case "sam_save_folder_info":
+                setCurrentFolderInfo();
+                break;
             default:
                 break;
         }
     }
 });
 
+async function setCurrentFolderInfo() {
+    let folder = await samUtils.getCurrentTabFolder();
+    samUtils.setCurrentFolderInfo({name: folder.name, id: folder.id, type: folder.type});
+}
 
 async function run(){
     samLog.log("Starting...");
@@ -90,7 +97,7 @@ async function run(){
 
     let folder = await samUtils.getCurrentTabFolder();
     if(prefs.do_only_sent_folders && !["sent"].includes(folder.type)) {
-        samUtils.showNotification("Warning!","This is not a \"sent\" folder!\r\nIf you want to run on any folder, change the preference in the options page.");
+        samUtils.showNotification(browser.i18n.getMessage("Warning") + "!", browser.i18n.getMessage("thisIsNotSentFolder"));
         samUtils.setPopupIdle();
         return;
     }
