@@ -93,12 +93,15 @@ body {
     border-radius: 5px; /* Rounded corners */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     margin:auto;
+    display: flex;
+    text-align: center;
 }
 
 .table {
     display: table;
-    width: 100%;
+    width: 90%;
     border-collapse: collapse;
+    margin: auto;
 }
 
 .table-row {
@@ -126,6 +129,7 @@ body {
 
 .report-message-list{
     display: none;
+    width: 100%;
 }
 
 .report_icon{

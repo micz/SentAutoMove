@@ -31,8 +31,6 @@ const samLog = new samLogger("mzsam-report", samStore.do_debug);
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    document.title = "Sent Auto Move Report done!";
-  
     samStore.do_debug = await samPrefs.getPref("do_debug");
     samPrefs.logger = samLog;
     i18n.updateDocument();
@@ -106,21 +104,21 @@ function renderReport(type, dataList, containerDiv) {
   // Create a title element for the table
   const titleElement = document.createElement('h2');
   titleElement.className = 'table-title';
-  titleElement.textContent = 'Report';
+  titleElement.textContent = browser.i18n.getMessage("Report");
 
   // Customize the title based on the type of report
   switch (type) {
     case 1:
-      titleElement.textContent = 'Moved Messages';
+      titleElement.textContent = browser.i18n.getMessage("Moved") + ' ' + browser.i18n.getMessage("Messages");
       break;
     case 2:
-      titleElement.textContent = 'Destination Folder not found';
+      titleElement.textContent = browser.i18n.getMessage("DestinationFolder") + ' ' + browser.i18n.getMessage("NotFound");
       break;
     case 3:
-      titleElement.textContent = 'Related Message not found';
+      titleElement.textContent = browser.i18n.getMessage("RelatedMessageFolder") + ' ' + browser.i18n.getMessage("NotFound");
       break;
     default:
-      titleElement.textContent = 'Undefined Report Type';
+      titleElement.textContent = browser.i18n.getMessage("ReportTypeUndefined");
   }
 
   // Append the title to the container
@@ -137,11 +135,11 @@ function renderReport(type, dataList, containerDiv) {
   // Create and append header cells
   const headerMessageId = document.createElement('div');
   headerMessageId.className = 'table-cell';
-  headerMessageId.textContent = 'Message ID';
+  headerMessageId.textContent = browser.i18n.getMessage("MessageID");
 
   const headerDate = document.createElement('div');
   headerDate.className = 'table-cell';
-  headerDate.textContent = 'Date';
+  headerDate.textContent = browser.i18n.getMessage("Date");
 
   let headerDestFolder = null;
 
@@ -150,20 +148,20 @@ function renderReport(type, dataList, containerDiv) {
     headerDestFolder.className = 'table-cell';
     switch(type) {
       case 1:
-        headerDestFolder.textContent = 'Destination Folder';
+        headerDestFolder.textContent = browser.i18n.getMessage("DestinationFolder");
         break;
       case 2:
-        headerDestFolder.textContent = 'Related Message Folder';
+        headerDestFolder.textContent = browser.i18n.getMessage("RelatedMessageFolder");
         break;
       default:
-        headerDestFolder.textContent = 'Report type undefined';
+        headerDestFolder.textContent = browser.i18n.getMessage("ReportTypeUndefined");
         break;
     }
   }
 
   const headerSubject = document.createElement('div');
   headerSubject.className = 'table-cell';
-  headerSubject.textContent = 'Subject';
+  headerSubject.textContent = browser.i18n.getMessage("Subject");
 
   // Append header cells to the header row
   headerRow.appendChild(headerMessageId);
@@ -205,7 +203,7 @@ function renderReport(type, dataList, containerDiv) {
                 destFolderCell.textContent = message.relmessage_folder;
                 break;
               default:
-                destFolderCell.textContent = 'Report type undefined';
+                destFolderCell.textContent = browser.i18n.getMessage("ReportTypeUndefined");
                 break;
             }
           }

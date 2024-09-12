@@ -3,42 +3,42 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="mzsam-report.css">
-    <title>SentAutoMove Report</title>
+    <title>SentAutoMove __MSG_Report__</title>
 </head>
 <body>
 <div id="miczReportHeader" class="container">
     <div class="section">
-        <div class="section-title"><img src="../images/icon-32px.png" class="report_icon" />Sent Auto Move Report</div>
-        <div class="info">Date: <strong><span id="report_date"></span></strong></div>
-        <div class="info">Elapsed: <strong><span id="elapsed_time"></span></strong></div>
-        <div class="info">Current account: <strong><span id="current_account_id"></span></strong></div>
-        <div class="info">Current folder: <strong><span id="current_folder"></span></strong></div>
+        <div class="section-title"><img src="../images/icon-32px.png" class="report_icon" />Sent Auto Move __MSG_Report__</div>
+        <div class="info">__MSG_Date__: <strong><span id="report_date"></span></strong></div>
+        <div class="info">__MSG_Elapsed__: <strong><span id="elapsed_time"></span></strong></div>
+        <div class="info">__MSG_CurrentAccount__: <strong><span id="current_account_id"></span></strong></div>
+        <div class="info">__MSG_CurrentFolder__: <strong><span id="current_folder"></span></strong></div>
     </div>
 
     <!-- Section for message counts -->
     <div class="section">
-        <div class="section-title">Messages</div>
+        <div class="section-title">__MSG_Messages__</div>
         <!-- Total messages styled distinctly and placed above -->
         <div class="total">
             <span id="tot_messages"></span>
-            <small>Total</small>
+            <small>__MSG_Total__</small>
         </div>
         <!-- Detailed message counts below the total -->
         <div class="list-details">
             <!-- Moved messages -->
             <div class="list-counter" data-id="moved_messages">
                 <span id="tot_moved"></span>
-                <small>Moved</small>
+                <small>__MSG_Moved__</small>
             </div>
             <!-- Destination folder not found -->
             <div class="list-counter" data-id="dest_folder_not_found_messages">
                 <span id="tot_dest_not_found"></span>
-                <small>No destination folder</small>
+                <small>__MSG_NoDestinationFolder__</small>
             </div>
             <!-- Related message not found -->
             <div class="list-counter" data-id="related_msg_not_found_messages">
                 <span id="tot_related_msg_not_found"></span>
-                <small>No related message</small>
+                <small>__MSG_NoRelatedMessage__</small>
             </div>
         </div>
     </div>
