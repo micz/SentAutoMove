@@ -332,5 +332,9 @@
   "thisIsNotSentFolder": {
     "message": "This is not a \"sent\" folder! If you want to run on any folder, change the preference in the options page.",
     "description": ""
+  },
+  "backToOptionsText": {
+    "message": "Options",
+    "description": ""
   }
 }
