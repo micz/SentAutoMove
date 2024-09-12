@@ -137,3 +137,53 @@ body {
     top: 0.5em;
     margin-right: 0.3em;
 }
+
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+    
+    .container {
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    .section-title {
+        color: #bb86fc;
+    }
+    
+    .info {
+        background-color: #2a2a2a;
+        border-left: 4px solid #bb86fc;
+    }
+    
+    .total {
+        background-color: #333;
+        color: #ffffff;
+    }
+    
+    .list-details {
+        background-color: #2a2a2a;
+    }
+    
+    .list-counter small {
+        color: #aaaaaa;
+    }
+    
+    .container_table {
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+    }
+    
+    .table-row.header {
+        background-color: #2a2a2a;
+    }
+    
+    .table-title {
+        color: #bb86fc;
+    }
+    
+}

@@ -163,4 +163,58 @@ input[type="number"] {
         border: 1px solid #555;
     }
 
+    div#miczDescription {
+        color: #e0e0e0;
+    }
+    
+    div#miczDescription h1 {
+        color: #ffffff;
+    }
+    
+    div#miczDonation {
+        color: #ffffff;
+    }
+    
+    table#miczPrefs {
+        color: #e0e0e0;
+    }
+    
+    table#miczPrefs td {
+        border-top: 1px solid #444;
+        border-bottom: 1px solid #444;
+    }
+    
+    div#miczRelNotes {
+        color: #e0e0e0;
+    }
+    
+    div#miczTranslate {
+        color: #ffffff;
+    }
+    
+    #reports_store {
+        color: #e0e0e0;
+    }
+    
+    .table-reports th {
+        background-color: #333;
+        color: #ffffff;
+    }
+    
+    .table-reports tbody tr:nth-child(even) {
+        background-color: #2a2a2a;
+    }
+    
+    .table-reports tbody tr:hover {
+        background-color: #3a3a3a;
+    }
+    
+    #btnDeleteReports {
+        background-color: #ff4444;
+    }
+    
+    #btnDeleteReports:hover {
+        background-color: #ff6666;
+    }  
+
 }
