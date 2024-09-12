@@ -250,6 +250,10 @@ export const samUtils = {
     //     result += remainingMilliseconds + 'ms';
     // }
 
+    if(result == '') {
+        result = '0s';
+    }
+
     return result.trim();
   },
 
