@@ -6,9 +6,15 @@
 </head>
 <body>
     <div class="container">
-        <div id="miczMessage"><i>Loading...</i></div>
-        <div id="miczWarn">We are going to auto move messages from the folder <strong><span id="current_folder"></span></strong>.
-            <br><button id="miczProceed">__MSG_Proceed__</button></div>
+        <div id="miczMessage"><i>__MSG_Loading__...</i></div>
+        <div id="folderNotSentWarning">__MSG_thisIsNotSentFolder__</div>
+        <div id="miczAskUser">
+            <div id="miczWarn">__MSG_AutoMoveMsg__
+                <div id="current_folder"></div>
+            </div>
+            <div id="askEmptyPrefix">__MSG_SubfolderPrefixEmptyWarn__</div>
+            <div id="miczBtn"><button id="miczProceed">__MSG_Proceed__</button></div>
+        </div>
     </div>
     <script src="mzsam-popup.js" type="module"></script>
 </body>

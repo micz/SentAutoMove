@@ -1,7 +1,8 @@
 body {
     margin: 0;
     padding: 0;
-    width: 40em;
+    width: 30em;
+    min-height: 5em;
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
   }
@@ -9,6 +10,7 @@ body {
   .container {
     padding: 15px;
     text-align: center;
+    min-height: 5em;
   }
   
   h1 {
@@ -36,7 +38,36 @@ body {
     background-color: #005a9e;
   }
 
+  #miczMessage{
+    display: none;
+    margin: auto;
+    min-height: 5em;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #current_folder{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  #miczAskUser{
+    display: none;
+  }
+
   #miczWarn{
     text-align: center;
   }
-  
+
+  #miczBtn{
+    margin-top: 15px;
+  }
+
+  #askEmptyPrefix, #folderNotSentWarning{
+    color:red;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    display: none;
+  }
