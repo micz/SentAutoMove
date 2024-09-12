@@ -4,102 +4,333 @@
     "description": "Description of the extension."
   },
   "prefs_OptionText_release_notes": {
-    "message": "Release Notes"
+    "message": "Release Notes",
+    "description": ""
   },
   "prefs_OptionText_dest_folder_type": {
-    "message": "Destination folder"
+    "message": "Destination folder",
+    "description": ""
   },
   "prefs_OptionText_subfolder": {
-    "message": "Subfolder"
+    "message": "Subfolder",
+    "description": ""
   },
   "prefs_OptionText_same_folder": {
-    "message": "Same folder"
+    "message": "Same folder",
+    "description": ""
   },
   "prefs_OptionText_dest_folder_type_info": {
-    "message": "Choose whether to move the mails to a subfolder or the same folder."
+    "message": "Choose whether to move the mails to a subfolder or the same folder.",
+    "description": ""
   },
   "prefs_OptionText_warn_before_run": {
-    "message": "Warn before running"
+    "message": "Warn before running",
+    "description": ""
   },
   "prefs_OptionText_warn_before_run_info": {
-    "message": "Warn the user before running the moving operation."
+    "message": "Warn the user before running the moving operation.",
+    "description": ""
   },
   "prefs_OptionText_dest_folder_prefix": {
-    "message": "Subfolder prefix"
+    "message": "Subfolder prefix",
+    "description": ""
   },
   "prefs_OptionText_dest_folder_prefix_info": {
-    "message": "Specify a prefix for the subfolder name where the mails will be moved."
+    "message": "Specify a prefix for the subfolder name where the mails will be moved.",
+    "description": ""
+  },
+  "prefs_OptionText_dest_folder_prefix_info_2": {
+    "message": "If left empty, the mails will be moved to the first subfolder.",
+    "description": ""
   },
   "prefs_OptionText_do_only_same_account": {
-    "message": "Same account only"
+    "message": "Same account only",
+    "description": ""
   },
   "prefs_OptionText_do_only_same_account_info": {
-    "message": "Search for related mail only in the same account."
+    "message": "Search for related mail only in the same account.",
+    "description": ""
   },
   "prefs_OptionText_do_only_sent": {
-    "message": "Sent mails only"
+    "message": "Sent mails only",
+    "description": ""
   },
   "prefs_OptionText_do_only_sent_info": {
-    "message": "Consider only mails that are sent by the account owner of the considered folder."
+    "message": "Consider only mails that are sent by the account owner of the considered folder.",
+    "description": ""
   },
   "prefs_OptionText_do_only_sent_folders": {
-    "message": "\"Sent\" type folders only"
+    "message": "\"Sent\" type folders only",
+    "description": ""
   },
   "prefs_OptionText_do_only_sent_folders_info": {
-    "message": "Consider only folders that are marked as \"Sent\" type. Otherwise give a warning to the user."
+    "message": "Consider only folders that are marked as \"Sent\" type. Otherwise give a warning to the user.",
+    "description": ""
   },
   "prefs_OptionText_ignore_archive_folders": {
-    "message": "Ignore archive folders"
+    "message": "Ignore archive folders",
+    "description": ""
   },
   "prefs_OptionText_ignore_archive_folders_info": {
-    "message": "Do not search for related mails that are in archive folders."
+    "message": "Do not search for related mails that are in archive folders.",
+    "description": ""
   },
-  "prefs_OptionText_min_moves_to_report": {
-    "message": "Min number of mails moved to report"
+  "prefs_OptionText_min_moves_to_open_report_tab": {
+    "message": "Min number of mails moved to open the report tab",
+    "description": ""
   },
-  "prefs_OptionText_min_moves_to_report_info": {
-    "message": "Set the minimum number of mails moved to generate a report in a new tab."
+  "prefs_OptionText_min_moves_to_open_report_tab_info": {
+    "message": "Set the minimum number of mails moved to automatically open the report in a new tab.",
+    "description": ""
   },
-  "prefs_OptionText_min_moves_to_report_info_2": {
-    "message": "(0 = Always)"
+  "prefs_OptionText_min_moves_to_open_report_tab_info_2": {
+    "message": "Always",
+    "description": ""
   },
   "prefs_OptionText_max_messages_moved": {
-    "message": "Max number of mails to move"
+    "message": "Max number of mails to move",
+    "description": ""
   },
   "prefs_OptionText_max_messages_moved_info": {
-    "message": "Set the maximum number of mails to move in a single operation."
+    "message": "Set the maximum number of mails to move in a single operation.",
+    "description": ""
   },
   "prefs_OptionText_max_messages_moved_info_2": {
-    "message": "(0 = Move all mails every time)"
+    "message": "Move all mails every time",
+    "description": ""
   },
   "prefs_OptionText_do_debug": {
-    "message": "Enable Debug Mode"
+    "message": "Enable Debug Mode",
+    "description": ""
   },
   "prefs_OptionText_do_debug_info": {
-    "message": "Turn on debug mode for additional logging."
+    "message": "Turn on debug mode for additional logging.",
+    "description": ""
   },
   "prefsInfoTitle": {
-    "message": "Important Information"
+    "message": "Important Information",
+    "description": ""
   },
   "prefsInfoDesc_1": {
-    "message": " "
+    "message": " ",
+    "description": ""
   },
   "prefsInfoDesc_2": {
-    "message": " "
+    "message": " ",
+    "description": ""
   },
   "prefsInfoDesc_3": {
-    "message": " "
+    "message": " ",
+    "description": ""
   },
   "TranslateText": {
-    "message": "Do you want to help translate this addon?"
+    "message": "Do you want to help translate this addon?",
+    "description": ""
   },
   "TranslateLink": {
-    "message": "Find out how!"
+    "message": "Find out how!",
+    "description": ""
   },
   "prefsDonation_1": {
-    "message": "Do you like this addon?"
+    "message": "Do you like this addon?",
+    "description": ""
   },
   "prefsDonation_2": {
-    "message": "Consider to make a donation!"
+    "message": "Consider to make a donation!",
+    "description": ""
+  },
+  "Proceed": {
+    "message": "Proceed",
+    "description": ""
+  },
+  "prefs_OptionText_btnManageReports": {
+    "message": "Show stored Reports",
+    "description": ""
+  },
+  "prefs_OptionText_btnDeleteReports": {
+    "message": "Delete all Reports",
+    "description": ""
+  },
+  "confirm_delete_reports": {
+    "message": "Are you sure you want to delete all stored Reports?",
+    "description": ""
+  },
+  "no_reports_found": {
+    "message": "There are no stored Reports",
+    "description": ""
+  },
+  "reports_deleted": {
+    "message": "Reports deleted",
+    "description": ""
+  },
+  "OpenReport": {
+    "message": "Open Report",
+    "description": ""
+  },
+  "Date": {
+    "message": "Date",
+    "description": ""
+  },
+  "Folder": {
+    "message": "Folder",
+    "description": ""
+  },
+  "Elapsed": {
+    "message": "Elapsed",
+    "description": ""
+  },
+  "Info": {
+    "message": "Info",
+    "description": ""
+  },
+  "Info_Tooltip": {
+    "message": "The numbers in order are: total messages, moved, destination folder not found, related message not found.",
+    "description": ""
+  },
+  "Report": {
+    "message": "Report",
+    "description": ""
+  },
+  "CurrentAccount": {
+    "message": "Current account",
+    "description": ""
+  },
+  "CurrentFolder": {
+    "message": "Current folder",
+    "description": ""
+  },
+  "Messages": {
+    "message": "Messages",
+    "description": ""
+  },
+  "Total": {
+    "message": "Total",
+    "description": ""
+  },
+  "Moved": {
+    "message": "Moved",
+    "description": ""
+  },
+  "NoDestinationFolder": {
+    "message": "No destination folder",
+    "description": ""
+  },
+  "NoRelatedMessage": {
+    "message": "No related message",
+    "description": ""
+  },
+  "Subject": {
+    "message": "Subject",
+    "description": ""
+  },
+  "ReportTypeUndefined": {
+    "message": "Undefined Report Type",
+    "description": ""
+  },
+  "MessageID": {
+    "message": "Message ID",
+    "description": ""
+  },
+  "DestinationFolder": {
+    "message": "Destination Folder",
+    "description": ""
+  },
+  "RelatedMessageFolder": {
+    "message": "Related Message Folder",
+    "description": ""
+  },
+  "NotFound": {
+    "message": "not Found",
+    "description": ""
+  },
+  "Loading": {
+    "message": "Loading",
+    "description": ""
+  },
+  "AutoMoveMsg": {
+    "message": "We are going to auto move messages from the folder",
+    "description": ""
+  },
+  "SubfolderPrefixEmptyWarn": {
+    "message": "The subfolder prefix is empty, are you sure to proceed?",
+    "description": ""
+  },
+  "sentAutoMoveTitle": {
+    "message": "Sent Auto Move"
+  },
+  "operationCompleted": {
+    "message": "Operation completed"
+  },
+  "messagesAnalyzed": {
+    "message": "$0$ message analyzed",
+    "placeholders": {
+      "0": {
+        "content": "$1"
+      }
+    }
+  },
+  "messagesAnalyzed_plural": {
+    "message": "$0$ messages analyzed",
+    "placeholders": {
+      "0": {
+        "content": "$1"
+      }
+    }
+  },
+  "messagesMoved": {
+    "message": "$0$ message moved",
+    "placeholders": {
+      "0": {
+        "content": "$1"
+      }
+    }
+  },
+  "messagesMoved_plural": {
+    "message": "$0$ messages moved",
+    "placeholders": {
+      "0": {
+        "content": "$1"
+      }
+    }
+  },
+  "messagesNotMoved": {
+    "message": "$0$ message not moved: destination folder not found",
+    "placeholders": {
+      "0": {
+        "content": "$1"
+      }
+    }
+  },
+  "messagesNotMoved_plural": {
+    "message": "$0$ messages not moved: destination folder not found",
+    "placeholders": {
+      "0": {
+        "content": "$1"
+      }
+    }
+  },
+  "relatedMessagesNotFound": {
+    "message": "$0$ related message not found",
+    "placeholders": {
+      "0": {
+        "content": "$1"
+      }
+    }
+  },
+  "relatedMessagesNotFound_plural": {
+    "message": "$0$ related messages not found",
+    "placeholders": {
+      "0": {
+        "content": "$1"
+      }
+    }
+  },
+  "Warning": {
+    "message": "Warning",
+    "description": ""
+  },
+  "thisIsNotSentFolder": {
+    "message": "This is not a \"sent\" folder! If you want to run on any folder, change the preference in the options page.",
+    "description": ""
   }
 }
