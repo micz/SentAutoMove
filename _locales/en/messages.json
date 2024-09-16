@@ -68,11 +68,11 @@
     "description": ""
   },
   "prefs_OptionText_ignore_archive_folders": {
-    "message": "Ignore archive folders",
+    "message": "Ignore \"archive\" folders",
     "description": ""
   },
   "prefs_OptionText_ignore_archive_folders_info": {
-    "message": "Do not search for related mails that are in archive folders.",
+    "message": "Do not search for related mails that are in \"archive\" folders.",
     "description": ""
   },
   "prefs_OptionText_min_moves_to_open_report_tab": {
@@ -112,11 +112,11 @@
     "description": ""
   },
   "prefsInfoDesc_1": {
-    "message": " ",
+    "message": "This add-on moves sent emails to the same folder or a subfolder of the original message they replied to. It also works for calendar invites (at least with Outlook 365).",
     "description": ""
   },
   "prefsInfoDesc_2": {
-    "message": " ",
+    "message": "Beware of changing these options. The default values are more conservative to prevent emails from being moved to the wrong places. Change them only if you know what you are doing!",
     "description": ""
   },
   "prefsInfoDesc_3": {
@@ -335,6 +335,50 @@
   },
   "backToOptionsText": {
     "message": "Options",
+    "description": ""
+  },
+  "prefs_OptionText_dest_folder_ok_same_folder_with_prefix": {
+    "message": "Same folder with prefix",
+    "description": ""
+  },
+  "prefs_OptionText_dest_folder_ok_same_folder_with_prefix_info": {
+    "message": "If no destination subfolder is found, use the same folder of the related message if it starts with the correct prefix. This is useful if you reply to a your sent email.",
+    "description": ""
+  },
+  "prefs_OptionText_use_also_thread_index": {
+    "message": "Use also thread-index",
+    "description": ""
+  },
+  "prefs_OptionText_use_also_thread_index_info": {
+    "message": "This option requires more time per message, but it helps find more related messages. It works for calendar invites.",
+    "description": ""
+  },
+  "executedFromSelection": {
+    "message": "Executed from a selection of messages",
+    "description": ""
+  },
+  "moveWith": {
+    "message": "Move with",
+    "description": ""
+  },
+  "prefs_OptionText_pause_between_messages": {
+    "message": "Pause after moves",
+    "description": ""
+  },
+  "prefs_OptionText_pause_between_messages_info": {
+    "message": "Pause after a message has been moved (in milliseconds).",
+    "description": ""
+  },
+  "prefs_OptionText_pause_between_messages_info_2": {
+    "message": "no pause",
+    "description": ""
+  },
+  "prefs_OptionText_pause_every_10_messages": {
+    "message": "Pause every 10 moves", 
+    "description": "" 
+  },
+  "prefs_OptionText_pause_every_10_messages_info": {
+    "message": "Pause after 10 messages have been moved (in milliseconds).",
     "description": ""
   }
 }
