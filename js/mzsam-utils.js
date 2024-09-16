@@ -85,7 +85,7 @@ export const samUtils = {
     return await samStore.getSessionData("currentFolder");
   },
 
-  async showNotification(title, message, dismissTime = 10000) {
+  async showNotification(title, message, dismissTime = 20000) {
     let notificationID = await browser.notifications.create(null,{
         "type": "basic",
         "title": title,
