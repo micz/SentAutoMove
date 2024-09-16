@@ -47,6 +47,17 @@
           </label>
         </td>
       </tr>
+      <tr class="dest_folder_type_subfolder">
+        <td><label>
+          <span>__MSG_prefs_OptionText_dest_folder_ok_same_folder_with_prefix__</span>
+        </label></td>
+        <td>
+          <label>
+            <input type="checkbox" id="dest_folder_ok_same_folder_with_prefix" name="dest_folder_ok_same_folder_with_prefix" class="option-input" />
+            <span>__MSG_prefs_OptionText_dest_folder_ok_same_folder_with_prefix_info__</span>
+          </label>
+        </td>
+      </tr>
       <tr>
         <td><label>
           <span>__MSG_prefs_OptionText_do_only_same_account__</span>
@@ -115,16 +126,49 @@
           </td>
         </tr>
         <tr>
-        <td><label>
-          <span>__MSG_prefs_OptionText_do_debug__</span>
-        </label></td>
-        <td>
-          <label>
-            <input type="checkbox" id="do_debug" name="do_debug" class="option-input" />
-            <span>__MSG_prefs_OptionText_do_debug_info__</span>
-          </label>
-        </td>
-      </tr>
+          <td><label>
+            <span>__MSG_prefs_OptionText_pause_between_messages__</span>
+          </label></td>
+          <td>
+            <label>
+              <input type="number" id="pause_between_messages" name="pause_between_messages" class="option-input" /> (0 = __MSG_prefs_OptionText_pause_between_messages_info_2__)
+              <br><span>__MSG_prefs_OptionText_pause_between_messages_info__</span>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td><label>
+            <span>__MSG_prefs_OptionText_pause_every_10_messages__</span>
+          </label></td>
+          <td>
+            <label>
+              <input type="number" id="pause_every_10_messages" name="pause_every_10_messages" class="option-input" /> (0 = __MSG_prefs_OptionText_pause_between_messages_info_2__)
+              <br><span>__MSG_prefs_OptionText_pause_every_10_messages_info__</span>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td><label>
+            <span>__MSG_prefs_OptionText_use_also_thread_index__</span>
+          </label></td>
+          <td>
+            <label>
+              <input type="checkbox" id="use_also_thread_index" name="use_also_thread_index" class="option-input" />
+              <span>__MSG_prefs_OptionText_use_also_thread_index_info__</span>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td><label>
+            <span>__MSG_prefs_OptionText_do_debug__</span>
+          </label></td>
+          <td>
+            <label>
+              <input type="checkbox" id="do_debug" name="do_debug" class="option-input" />
+              <span>__MSG_prefs_OptionText_do_debug_info__</span>
+            </label>
+          </td>
+        </tr>
     </table>
     <div id="btn_reports">
       <button id="btnManageReports">__MSG_prefs_OptionText_btnManageReports__</button>
