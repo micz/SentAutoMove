@@ -18,7 +18,8 @@
         "messagesMove",
         "compose",
         "notifications",
-        "storage"
+        "storage",
+        "menus"
     ],
     "options_ui":{
         "page": "options/mzsam-options.html"
