@@ -28,11 +28,15 @@ export class movingEngine {
   logger = null;
   do_only_sent = true;
   do_only_same_account = true;
+  use_also_thread_index = false;
   dest_folder_type = '';
   dest_folder_prefix = '';
+  dest_folder_ok_same_folder_with_prefix = true;
   ignore_archive_folders = true;
   min_moves_to_open_report_tab = 0;
   max_messages_moved = 0;
+  pause_between_messages = 200;
+  pause_every_10_messages = 1000;
 
     // async sentMessageListener(sendInfo){
     //   if((sendInfo.mode == "sendNow") && (sendInfo.headerMessageId != undefined) && (sendInfo.headerMessageId != '')){
@@ -74,11 +78,11 @@ export class movingEngine {
       }
       
       this.logger.log("Checking folder [" + folder.name + "]");
-      await this.moveMessages(query_params, samUtils.getFolderAccountId(folder));
+      await this.moveMessages(messenger.messages.query(query_params), samUtils.getFolderAccountId(folder), query_params);
     }
 
 
-    async moveMessages(query_params, account_id){
+    async moveMessages(message_list, account_id = -1, query_params = null){
         samUtils.setPopupStarting();
         let start_time = performance.now();
         //set debug option
@@ -91,11 +95,21 @@ export class movingEngine {
         let tot_dest_not_found = 0;
         let tot_related_msg_not_found = 0;
 
-        let account_emails = await samUtils.getAccountEmails(account_id);
+        let account_emails = null;
+        let account_emails_map = {};
 
-        let messages = this.getMessages(messenger.messages.query(query_params));
+        if(account_id != -1){
+          account_emails = await samUtils.getAccountEmails(account_id);
+        }
 
-        report_data.current_folder = samStore.istb128orgreater ? (await messenger.folders.get(query_params.folderId)).name : query_params.folder.name;
+        let messages = this.getMessages(message_list);
+
+        let folder_string = browser.i18n.getMessage("executedFromSelection");
+        if(query_params !== null){
+          folder_string = samStore.istb128orgreater ? (await messenger.folders.get(query_params.folderId)).name : query_params.folder.name;
+        }
+
+        report_data.current_folder = folder_string;
         report_data.current_account_id = account_id;
         report_data.moved_messages = {};
         report_data.dest_folder_not_found_messages = {};
@@ -114,6 +128,13 @@ export class movingEngine {
               const key_author = match_author[0].toLowerCase();
               // console.log(">>>>>>>>>> key_author: " + key_author);
               // console.log(">>>>>>>>>> account_emails: " + JSON.stringify(account_emails));
+              if(account_id == -1){
+                let curr_acc_id = samUtils.getFolderAccountId(message.folder);
+                if(!(curr_acc_id in account_emails_map)){
+                  account_emails_map[curr_acc_id] = await samUtils.getAccountEmails(curr_acc_id);
+                }
+                account_emails = account_emails_map[curr_acc_id];
+              }
               if(!account_emails.includes(key_author)) {
                 this.logger.log("Account is not the author, skipping message [" + message.subject + "] [" + message.headerMessageId + "]");
                 continue;
@@ -122,12 +143,16 @@ export class movingEngine {
           }
            tot_messages++;
            //console.log(">>>>>>>>>>>> Original message.subject: [" + message.folder.name + "] " + message.subject);
-           let related_message = await this.findRelatedMessage(message, account_id);
+           let curr_account_id = account_id;
+           if(account_id == -1){
+            curr_account_id = samUtils.getFolderAccountId(message.folder);
+           }
+           let related_message = await this.findRelatedMessage(message, curr_account_id);
            if(related_message !== false){
             let dest_folder = false;
             switch(this.dest_folder_type){
               case 'subfolder':
-                dest_folder = await this.getDestSubFolder(related_message,this.dest_folder_prefix);
+                dest_folder = await this.getDestSubFolder(related_message,this.dest_folder_prefix,this.dest_folder_ok_same_folder_with_prefix);
                 break;
               case 'same_folder':
                 dest_folder = await this.getDestSameFolder(related_message);
@@ -135,15 +160,30 @@ export class movingEngine {
             }
             if(dest_folder !== false){
               // ================================ The following line has to be commented out for testing ================================
-              // await messenger.messages.move([message.id], samUtils.getParameter(dest_folder));
+              messenger.messages.move([message.id], samUtils.getParameter(dest_folder)).catch((err) => {
+                this.logger.error("Error moving message [" + message.subject + "] [" + message.headerMessageId + "]: " + err);
+              });
               // ========================================================================================================================
               tot_moved++;
               this.logger.log("Moving [" + message.subject + "] to [" + dest_folder.name + "] [" + message.headerMessageId + "]");
+              this.logger.log("Messages moved [" + tot_moved + "]");
               report_data.moved_messages[message.headerMessageId] = {}
               report_data.moved_messages[message.headerMessageId].headerMessageId = message.headerMessageId;
               report_data.moved_messages[message.headerMessageId].dest_folder = dest_folder.name;
               report_data.moved_messages[message.headerMessageId].subject = message.subject;
               report_data.moved_messages[message.headerMessageId].date = message.date;
+              // Pause after moving a message
+              if(this.pause_between_messages > 0){
+                this.logger.log("Pausing " + this.pause_between_messages + "ms after moving a message...");
+                await new Promise(resolve => setTimeout(resolve, this.pause_between_messages));
+                this.logger.log("Resuming...");
+              }
+              // Pause after 10 messages
+              if(this.pause_every_10_messages > 0 && (tot_moved % 10 == 0)){
+                this.logger.log("Pausing " + this.pause_every_10_messages + "ms after moving 10 messages...");
+                await new Promise(resolve => setTimeout(resolve, this.pause_every_10_messages));
+                this.logger.log("Resuming...");
+              }
             }else{
               tot_dest_not_found++;
               this.logger.log("No dest folder found for [" + message.folder.name + "] " + message.subject + " [" + message.headerMessageId + "]");
@@ -176,7 +216,7 @@ export class movingEngine {
 
         this.logger.log("Operation completed: " + tot_messages + " messages analyzed, " + tot_moved + " messages moved, " + tot_dest_not_found + " messages not moved: dest folder not found." + (tot_related_msg_not_found > 0 ? "\n" + tot_related_msg_not_found + " related messages not found" : ""));
         
-        let report_id = account_id + "_" +  (new Date()).toLocaleString(undefined,{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).replace(/[-:.,// ]/g, '') + "_" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        let report_id = (account_id != -1 ? account_id : '_from_selection_' ) + "_" +  (new Date()).toLocaleString(undefined,{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).replace(/[-:.,// ]/g, '') + "_" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
         report_data.report_id = report_id;
         report_data.tot_messages = tot_messages;
         report_data.tot_moved = tot_moved;
@@ -196,6 +236,7 @@ export class movingEngine {
     // this method finds the message related to the one passed to it
     async findRelatedMessage(message, account_id = 0){
 
+      this.logger.log("findRelatedMessage for message: " + message.headerMessageId);
       let fullMsg = await messenger.messages.getFull(message.id);
       // console.log(">>>>>>>>>>>> fullMsg: " + JSON.stringify(fullMsg.headers));
       let inReplyToHeaders = fullMsg.headers['in-reply-to'];
@@ -265,44 +306,46 @@ export class movingEngine {
 
       // we found nothing, try "Thread-Index": see https://managing.blue/2007/12/11/trying-to-make-use-of-outlooks-thread-index-header/
       // this is an event invite and response, so the message sent from the account is one-to-one
-      let thread_indexHeaders = fullMsg.headers['thread-index'];
-      this.logger.log("threadindexHeaders: " + JSON.stringify(thread_indexHeaders));
-      //console.log(">>>>>> message: " + JSON.stringify(message));
-      if(thread_indexHeaders != undefined){
-        thread_indexHeaders = thread_indexHeaders[0].substring(0, 28);
-        let query_params = {  // get only messages from the recipient of the current message and sent from the current account
-          recipients: message.author,
-          author: message.recipients[0],
-          subject: samUtils.extractInviteSubject(message.subject),  // this is an invite response
-        }
-
-        let found_messages = null;
-        //only from this account
-        if(this.do_only_same_account){
-          if(samStore.istb128orgreater){  //TB128
-            //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-            query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder));
-          }else{  // TB 115
-            found_messages = this.getAccountMessages(query_params, account_id);
+      if(this.use_also_thread_index){
+        let thread_indexHeaders = fullMsg.headers['thread-index'];
+        this.logger.log("threadindexHeaders: " + JSON.stringify(thread_indexHeaders));
+        //console.log(">>>>>> message: " + JSON.stringify(message));
+        if(thread_indexHeaders != undefined){
+          thread_indexHeaders = thread_indexHeaders[0].substring(0, 28);
+          let query_params = {  // get only messages from the recipient of the current message and sent from the current account
+            recipients: message.author,
+            author: message.recipients[0],
+            subject: samUtils.extractInviteSubject(message.subject),  // this is an invite response
           }
-        }
 
-        if(found_messages == null) found_messages = this.getMessages(messenger.messages.query(query_params));
+          let found_messages = null;
+          //only from this account
+          if(this.do_only_same_account){
+            if(samStore.istb128orgreater){  //TB128
+              //query_params.accountId = samUtils.getFolderAccountId(message.folder);
+              query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder));
+            }else{  // TB 115
+              found_messages = this.getAccountMessages(query_params, account_id);
+            }
+          }
 
-        for await (let found_msg of found_messages) {
-          let fullFoundMsg = await messenger.messages.getFull(found_msg.id);
-          let found_thread_indexHeaders = fullFoundMsg.headers['thread-index'];
-          if(found_thread_indexHeaders == undefined) continue;
-          found_thread_indexHeaders = found_thread_indexHeaders[0].substring(0, 28);
-          if(found_thread_indexHeaders == thread_indexHeaders){
-            this.logger.log("[thread-index] Related found_msg.subject: [" + found_msg.folder.name + "] " + found_msg.subject + " [" + message.headerMessageId + "]");
-            // get only the first one at the moment
-            return found_msg;
+          if(found_messages == null) found_messages = this.getMessages(messenger.messages.query(query_params));
+
+          for await (let found_msg of found_messages) {
+            let fullFoundMsg = await messenger.messages.getFull(found_msg.id);
+            let found_thread_indexHeaders = fullFoundMsg.headers['thread-index'];
+            if(found_thread_indexHeaders == undefined) continue;
+            found_thread_indexHeaders = found_thread_indexHeaders[0].substring(0, 28);
+            if(found_thread_indexHeaders == thread_indexHeaders){
+              this.logger.log("[thread-index] Related found_msg.subject: [" + found_msg.folder.name + "] " + found_msg.subject + " [" + message.headerMessageId + "]");
+              // get only the first one at the moment
+              return found_msg;
+            }
           }
         }
       }
 
-
+      this.logger.log("[findRelatedMessage] No related message found.");
       // we found nothing, so return false
       return false;
     }
@@ -323,7 +366,7 @@ export class movingEngine {
       return extractedValues;
     }
 
-    async getDestSubFolder(message, prefix){
+    async getDestSubFolder(message, prefix, same_folder_with_prefix){
       let currentFolder = message.folder;
       let subFolders = null;
 
@@ -334,6 +377,11 @@ export class movingEngine {
             return subFolder;
         }
       }
+
+      if((same_folder_with_prefix) && (currentFolder.name.startsWith(prefix))){
+        return currentFolder;
+      }
+
       return false;
     }
 
@@ -364,6 +412,7 @@ export class movingEngine {
 
   // TB 115 only
   async *getAccountMessages(queryInfo, account_id = 0) {
+  try{
     if(account_id == 0) {
       yield* this.getMessages(browser.messages.query(queryInfo));
       return;
@@ -382,18 +431,24 @@ export class movingEngine {
       }
       yield* this.processFolderAndSubfolders(folder, queryInfo, account_id);
     }
+  } catch(e) {
+    console.error("getAccountMessages error: " + e);
+  }
   }
 
   async *processFolderAndSubfolders(folder, queryInfo, account_id) {
+    try{
+      //console.log(`>>>>>>>> processFolderAndSubfolders Listing messages for folder: ${folder.name}, path: ${folder.path}`);
+      queryInfo.folder = folder;
+      // console.log(">>>>>>>>>> processFolderAndSubfolders queryInfo: " + JSON.stringify(queryInfo));
+      yield* this.getMessages(browser.messages.query(queryInfo));
 
-    //console.log(`>>>>>>>> processFolderAndSubfolders Listing messages for folder: ${folder.name}, path: ${folder.path}`);
-    queryInfo.folder = folder;
-    // console.log(">>>>>>>>>> processFolderAndSubfolders queryInfo: " + JSON.stringify(queryInfo));
-    yield* this.getMessages(browser.messages.query(queryInfo));
-
-    let subfolders = await browser.folders.getSubFolders(folder);
-    for (let subfolder of subfolders) {
-        yield* this.processFolderAndSubfolders(subfolder, queryInfo, account_id);
+      let subfolders = await browser.folders.getSubFolders(folder);
+      for (let subfolder of subfolders) {
+          yield* this.processFolderAndSubfolders(subfolder, queryInfo, account_id);
+      }
+    } catch(e) {
+      console.error("processFolderAndSubfolders error: " + e);
     }
   }
 
