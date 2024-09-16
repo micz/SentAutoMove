@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     setValue("current_folder", report.current_folder);
-    setValue("current_account_id", await samUtils.getAccountName(report.current_account_id));
+    setValue("current_account_id", report.current_account_id != -1 ? await samUtils.getAccountName(report.current_account_id) : browser.i18n.getMessage("executedFromSelection"));
     setValue("tot_messages", report.tot_messages);
     setValue("tot_moved", report.tot_moved);
     setValue("tot_dest_not_found", report.tot_dest_not_found);
