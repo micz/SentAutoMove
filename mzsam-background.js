@@ -107,8 +107,48 @@ async function run(){
     }
 
     let mvEngine = new movingEngine(params);
-    await mvEngine.checkFolder(folder);
+    try{
+        await mvEngine.checkFolder(folder);
+    } catch(e) {
+        samStore.setSessionData("is_running", false);
+        samLog.error("Error: " + e);    
+    }
     samStore.setSessionData("is_running", false);
     samLog.log("Operation completed!");
     samUtils.setPopupCompleted();
 }
+
+
+browser.menus.create({
+    id: "sam-single-msg",
+    title: browser.i18n.getMessage("moveWith") + " SentAutoMove",
+    contexts: ["message_list"]
+    });
+
+browser.menus.onClicked.addListener(async (info, tab) => {
+    if (info.menuItemId === "sam-single-msg") {
+        samLog.log("Starting...");
+        samUtils.setPopupStarting();
+        samStore.setSessionData("is_running", true);
+        let prefs = await samPrefs.getPrefs(Object.keys(prefs_default));
+        samStore.do_debug = prefs.do_debug;
+
+        samLog.log("Using message menu...");
+        
+        let params = {};
+        for (let key of Object.keys(prefs)) {
+            params[key] = prefs[key];
+        }
+
+        let mvEngine = new movingEngine(params);
+        try{
+            await mvEngine.moveMessages(info.selectedMessages);
+        } catch(e) {
+            samStore.setSessionData("is_running", false);
+            samLog.error("Error: " + e);    
+        }
+        samStore.setSessionData("is_running", false);
+        samLog.log("Operation completed!");
+        samUtils.setPopupCompleted();
+    }
+});
