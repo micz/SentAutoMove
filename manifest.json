@@ -8,8 +8,7 @@
     "browser_specific_settings": {
         "gecko": {
             "id": "sentautomove@micz.it",
-            "strict_min_version": "115.0",
-            "strict_max_version": "115.*"
+            "strict_min_version": "115.0"
         }
     },
     "permissions": [
