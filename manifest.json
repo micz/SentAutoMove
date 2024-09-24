@@ -8,7 +8,8 @@
     "browser_specific_settings": {
         "gecko": {
             "id": "sentautomove@micz.it",
-            "strict_min_version": "115.0"
+            "strict_min_version": "115.0",
+            "strict_max_version": "115.*"
         }
     },
     "permissions": [
@@ -37,5 +38,15 @@
         "default_title": "SentAutoMove",
         "default_icon": "images/icon-32px.png",
         "default_popup": "popup/mzsam-popup.html"
+    },
+    "experiment_apis": {
+        "ImapTools": {
+            "schema": "api/ImapTools/schema.json",
+            "parent": {
+                "scopes": ["addon_parent"],
+                "paths": [["ImapTools"]],
+                "script": "api/ImapTools/implementation.js"
+            }
+        }
     }
 }
