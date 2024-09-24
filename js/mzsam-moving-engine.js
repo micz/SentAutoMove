@@ -161,22 +161,9 @@ export class movingEngine {
                 break;
             }
             if(dest_folder !== false){
-              console.log(">>>>>>>>>>>> dest_folder: " + JSON.stringify(dest_folder));
+              // console.log(">>>>>>>>>>>> dest_folder: " + JSON.stringify(dest_folder));
               // ================================ The following line has to be commented out for testing ================================
               await this.doMessagesMove([message.id], dest_folder);
-              // this.logger.log("Start moving messages: " + JSON.stringify([message.id]));
-              // console.log(">>>>>>>>>>>> Start moving messages: " + JSON.stringify([message.id]));
-              // this.logger.log("Destination folder: " + JSON.stringify(dest_folder));
-              // console.log(">>>>>>>>>>>> Destination folder: " + JSON.stringify(dest_folder));
-              // await messenger.messages.move([message.id], samUtils.getParameter(dest_folder)).catch((err) => {
-              //   this.logger.error("Error moving message [" + message.subject + "] [" + message.headerMessageId + "]: " + err);
-              //   console.error("Error moving message [" + message.subject + "] [" + message.headerMessageId + "]: " + err);
-              // });
-              // this.logger.log("Messasegs moved, waiting for destination folder update...");
-              // console.log(">>>>>>>>>>>> Messasegs moved, waiting for destination folder update...");
-              // await browser.ImapTools.forceServerUpdate(dest_folder.accountId, dest_folder.path);
-              // this.logger.log("Destination folder updated.");
-              // console.log(">>>>>>>>>>>> Destination folder updated.");
               // ========================================================================================================================
               tot_moved++;
               this.logger.log("Moving [" + message.subject + "] to [" + dest_folder.name + "] [" + message.headerMessageId + "]");
@@ -253,7 +240,11 @@ export class movingEngine {
         this.logger.error("Error moving message [" + message.subject + "] [" + message.headerMessageId + "]: " + err);
       });
       this.logger.log("Messasegs moved, waiting for destination folder update...");
+      try{
       await browser.ImapTools.forceServerUpdate(dest_folder.accountId, dest_folder.path);
+      }catch(err){
+        this.logger.error("Error updating destination folder: " + err);
+      }
       this.logger.log("Destination folder updated.");
     }
 
