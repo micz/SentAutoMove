@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    document.title = "SentAutoMove " + browser.i18n.getMessage("Report") + " " + samUtils.formatDateString_Short(report.report_date);
+
     setValue("current_folder", report.current_folder);
     setValue("current_account_id", report.current_account_id != -1 ? await samUtils.getAccountName(report.current_account_id) : browser.i18n.getMessage("executedFromSelection"));
     setValue("tot_messages", report.tot_messages);
