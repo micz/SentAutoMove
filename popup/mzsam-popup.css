@@ -64,7 +64,7 @@ body {
     margin-top: 15px;
   }
 
-  #askEmptyPrefix, #folderNotSentWarning{
+  #askEmptyPrefix, #folderNotSentWarning, #TBOfflineWarning{
     color:red;
     text-align: center;
     font-weight: bold;
