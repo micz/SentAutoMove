@@ -85,17 +85,25 @@ messenger.runtime.onMessage.addListener(async (message, sender, sendResponse) =>
 
 async function setCurrentFolderInfo() {
     let folder = await samUtils.getCurrentTabFolder();
-    samUtils.setCurrentFolderInfo({name: folder.name, id: folder.id, type: folder.type});
+    samUtils.setCurrentFolderInfo({name: folder.name, id: folder.id, type: folder.type, accountId: folder.accountId});
 }
 
 async function run(){
     samLog.log("Starting...");
     samUtils.setPopupStarting();
-    samStore.setSessionData("is_running", true);
+    samStore.setIsRunning(true);
     let prefs = await samPrefs.getPrefs(Object.keys(prefs_default));
     samStore.do_debug = prefs.do_debug;
 
     let folder = await samUtils.getCurrentTabFolder();
+    let curr_account = await browser.accounts.get(folder.accountId, false);
+    // If it's an IMAP Account and we are offline it's better do nothing
+    if(samUtils.isAccountIMAP(curr_account) && !samUtils.isThunderbirdOnline()) {
+        samUtils.showNotification(browser.i18n.getMessage("Warning") + "!", browser.i18n.getMessage("ThunderbirdOffline"));
+        samUtils.setPopupIdle();
+        return;
+    }
+    samStore.setOnline(true);
     if(prefs.do_only_sent_folders && !["sent"].includes(folder.type)) {
         samUtils.showNotification(browser.i18n.getMessage("Warning") + "!", browser.i18n.getMessage("thisIsNotSentFolder"));
         samUtils.setPopupIdle();
@@ -110,12 +118,11 @@ async function run(){
     try{
         await mvEngine.checkFolder(folder);
     } catch(e) {
-        samStore.setSessionData("is_running", false);
+        samStore.setIsRunning(false);
         samLog.error("Error: " + e);    
     }
-    samStore.setSessionData("is_running", false);
+    samStore.setIsRunning(false);
     samLog.log("Operation completed!");
-    samUtils.setPopupCompleted();
 }
 
 
@@ -129,11 +136,21 @@ browser.menus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === "sam-single-msg") {
         samLog.log("Starting...");
         samUtils.setPopupStarting();
-        samStore.setSessionData("is_running", true);
+        samStore.setIsRunning(true);
         let prefs = await samPrefs.getPrefs(Object.keys(prefs_default));
         samStore.do_debug = prefs.do_debug;
 
         samLog.log("Using message menu...");
+
+        let folder = await samUtils.getCurrentTabFolder();
+        let curr_account = await browser.accounts.get(folder.accountId, false);
+        // If it's an IMAP Account and we are offline it's better do nothing
+        if(samUtils.isAccountIMAP(curr_account) && !samUtils.isThunderbirdOnline()) {
+            samUtils.showNotification(browser.i18n.getMessage("Warning") + "!", browser.i18n.getMessage("ThunderbirdOffline"));
+            samUtils.setPopupIdle();
+            return;
+        }
+        samStore.setOnline(true);
         
         let params = {};
         for (let key of Object.keys(prefs)) {
@@ -144,11 +161,21 @@ browser.menus.onClicked.addListener(async (info, tab) => {
         try{
             await mvEngine.moveMessages(info.selectedMessages);
         } catch(e) {
-            samStore.setSessionData("is_running", false);
+            samStore.setIsRunning(false);
             samLog.error("Error: " + e);    
         }
-        samStore.setSessionData("is_running", false);
+        samStore.setIsRunning(false);
         samLog.log("Operation completed!");
         samUtils.setPopupCompleted();
     }
+});
+
+window.addEventListener("offline", (e) => {
+    samStore.setOnline(false);
+    samLog.log("Thunderbird offline");
+});
+
+window.addEventListener("online", (e) => {
+    samStore.setOnline(true);
+    samLog.log("Thunderbird online");
 });

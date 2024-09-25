@@ -35,13 +35,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById("miczProceed").addEventListener("click", doProceed);
 
-    if(!await samStore.getSessionData('is_running')){
+    if(!await samStore.getIsRunning()){
         browser.browserAction.setIcon({path: "../images/icon.png"});
         let prefs = await samPrefs.getPrefs(["warn_before_run","_internal__ask_empty_prefix_done","dest_folder_prefix","do_only_sent_folders"]);
 
+        let folder_info = await samUtils.getCurrentFolderInfo();
+        let curr_account = await browser.accounts.get(folder_info.accountId, false);
+
+        // If it's an IMAP Account and we are offline it's better do nothing
+        if(samUtils.isAccountIMAP(curr_account) && !samUtils.isThunderbirdOnline()) {
+            showThunderbirdOfflineDiv();
+            i18n.updateDocument();
+            return;
+        }
+
         // Check if only "sent" folder, are we in a "sent" folder?
         if(prefs.do_only_sent_folders){
-            let folder_info = await samUtils.getCurrentFolderInfo();
             if(!["sent"].includes(folder_info.type)) {
                 showFolderNotSentWarningDiv();
                 i18n.updateDocument();
@@ -95,6 +104,10 @@ function showEmptyPrefixDiv(){
 
 function showFolderNotSentWarningDiv(){
     document.getElementById("folderNotSentWarning").style.display = "block";
+}
+
+function showThunderbirdOfflineDiv(){
+    document.getElementById("TBOfflineWarning").style.display = "block";
 }
 
 async function setCurrentFolder(){

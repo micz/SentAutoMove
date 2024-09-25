@@ -90,6 +90,9 @@ export class movingEngine {
         //set debug option
         this.logger.changeDebug(samStore.do_debug);
 
+        let operation_aborted = false;
+        let imap_force_folder_update = samPrefs.getPref("imap_force_folder_update");
+
         let report_data = {};
         report_data.report_date = new Date();
         let tot_messages = 0;
@@ -123,6 +126,23 @@ export class movingEngine {
             this.logger.log("Max number of messages to move reached, stopping...");
             break;
           }
+          let curr_account_id = account_id;
+          if(account_id == -1){
+           curr_account_id = samUtils.getFolderAccountId(message.folder);
+          }
+          // Check if we are online in case of IMAP account
+          let curr_account = await browser.accounts.get(curr_account_id, false);
+          // If it's an IMAP Account and we are offline it's better to stop
+          // console.log(">>>>>>>>>> curr_account: " + JSON.stringify(curr_account));
+          // console.log(">>>>>>>>>> samUtils.isAccountIMAP(curr_account): " + samUtils.isAccountIMAP(curr_account));
+          // console.log(">>>>>>>> samStore.getOnline(): " + await samStore.getOnline());
+          if(samUtils.isAccountIMAP(curr_account) && !await samStore.getOnline()) {
+            this.logger.log("Thunderbird is offline, stopping...");
+            samUtils.setPopupError();
+            samUtils.showNotification(browser.i18n.getMessage("Warning") + "!", browser.i18n.getMessage("ThunderbirdGoneOffline"));
+            operation_aborted = true;
+            break;
+          }
           // console.log(">>>>>>>>>> this.do_only_sent: " + this.do_only_sent);
           if(this.do_only_sent){
             const match_author = message.author.match(samUtils.regexEmail);
@@ -145,10 +165,6 @@ export class movingEngine {
           }
            tot_messages++;
            //console.log(">>>>>>>>>>>> Original message.subject: [" + message.folder.name + "] " + message.subject);
-           let curr_account_id = account_id;
-           if(account_id == -1){
-            curr_account_id = samUtils.getFolderAccountId(message.folder);
-           }
            let related_message = await this.findRelatedMessage(message, curr_account_id);
            if(related_message !== false){
             let dest_folder = false;
@@ -163,7 +179,7 @@ export class movingEngine {
             if(dest_folder !== false){
               // console.log(">>>>>>>>>>>> dest_folder: " + JSON.stringify(dest_folder));
               // ================================ The following line has to be commented out for testing ================================
-              await this.doMessagesMove([message.id], dest_folder);
+              await this.doMessagesMove([message.id], dest_folder, imap_force_folder_update);
               // ========================================================================================================================
               tot_moved++;
               this.logger.log("Moving [" + message.subject + "] to [" + dest_folder.name + "] [" + message.headerMessageId + "]");
@@ -203,7 +219,7 @@ export class movingEngine {
             report_data.related_msg_not_found_messages[message.headerMessageId].date = message.date;
            }
         }
-        samUtils.setPopupCompleted();
+        if(!operation_aborted) samUtils.setPopupCompleted();
         const notificationTitle = browser.i18n.getMessage("sentAutoMoveTitle");
         const operationCompletedText = browser.i18n.getMessage("operationCompleted");
 
@@ -233,19 +249,23 @@ export class movingEngine {
         }
     }
 
-    async doMessagesMove(messageIds, dest_folder){
+    async doMessagesMove(messageIds, dest_folder, force_folder_update = true){
       this.logger.log("Start moving messages: " + JSON.stringify(messageIds));
       this.logger.log("Destination folder: " + JSON.stringify(dest_folder));
       await messenger.messages.move(messageIds, samUtils.getParameter(dest_folder)).catch((err) => {
         this.logger.error("Error moving message [" + message.subject + "] [" + message.headerMessageId + "]: " + err);
       });
-      this.logger.log("Messasegs moved, waiting for destination folder update...");
-      try{
-      await browser.ImapTools.forceServerUpdate(dest_folder.accountId, dest_folder.path);
-      }catch(err){
-        this.logger.error("Error updating destination folder: " + err);
+      if(force_folder_update){
+        this.logger.log("Messasegs moved, waiting for destination folder update...");
+        try{
+        await browser.ImapTools.forceServerUpdate(dest_folder.accountId, dest_folder.path);
+        }catch(err){
+          this.logger.error("Error updating destination folder: " + err);
+        }
+        this.logger.log("Destination folder updated.");
+      }else{
+        this.logger.log("Not forcing a destination folder update.");
       }
-      this.logger.log("Destination folder updated.");
     }
 
     // this method finds the message related to the one passed to it
