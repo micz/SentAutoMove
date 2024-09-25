@@ -77,6 +77,11 @@ export const samUtils = {
     browser.browserAction.setIcon({path: "images/icon-completed.png"});
   },
 
+  setPopupError(){
+    samUtils.setPopupMessage("SAM: Error!");
+    browser.browserAction.setIcon({path: "images/icon-error.png"});
+  },
+
   setCurrentFolderInfo(folder_info){
     samStore.setSessionData("currentFolder", folder_info);
   },
@@ -111,7 +116,7 @@ export const samUtils = {
 
       // Get the accountId and folder of the open tab
       let folder = currentTab.displayedFolder;
-      let accountId = folder.accountId;
+      //let accountId = folder.accountId;
 
       // console.log("Account ID:", accountId);
       // console.log("Folder:", folder);
@@ -207,6 +212,14 @@ export const samUtils = {
     return folder.accountId;
   },
 
+  isThunderbirdOnline(){
+    return navigator.onLine;
+  },
+
+  isAccountIMAP(account) {
+    return account.type == "imap";
+  },
+
   getParameter(param){
     if(samStore.istb128orgreater){
       return param.id;
@@ -276,6 +289,25 @@ export const samUtils = {
   
     // Combine date and time
     return `${formattedDate} - ${formattedTime}`;
+  },
+
+  formatDateString_Short(date, locale = undefined) {
+    // Format the date part
+    const formattedDate = date.toLocaleDateString(locale, {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric'
+    });
+  
+    // Format the time part
+    const formattedTime = date.toLocaleTimeString(locale, {
+      hour: '2-digit',   // Two-digit hour (e.g., "14")
+      minute: '2-digit', // Two-digit minute (e.g., "54")
+      hour12: false      // Use 24-hour time format
+    });
+  
+    // Combine date and time
+    return `${formattedTime} ${formattedDate}`;
   },
 
   getLocalizedMessage(key, count) {
