@@ -20,6 +20,22 @@
 export const samStore = {
     'do_debug': false,
     'istb128orgreater': false,
+    
+    async setOnline(value) {
+        await samStore.setSessionData("tbOnline", value);
+    },
+
+    async getOnline() {
+        return await samStore.getSessionData("tbOnline");
+    },
+
+    async getIsRunning(){
+        return await samStore.getSessionData('is_running');
+    },
+
+    async setIsRunning(value){
+        await samStore.setSessionData('is_running', value);
+    },
 
     async setSessionData (key, value) {
         let obj = {};
