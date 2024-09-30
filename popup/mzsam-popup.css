@@ -72,6 +72,15 @@ body {
     display: none;
   }
 
+  .live-counter td{
+    vertical-align: top;
+    text-align: left;
+  }
+
+  td.live-counter-msg{
+    padding-right: 10px;
+  }
+
 
 @media (prefers-color-scheme: dark) {
   body {

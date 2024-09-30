@@ -62,6 +62,9 @@ export class movingEngine {
       this.ignore_archive_folders = params.ignore_archive_folders;
       this.min_moves_to_open_report_tab = params.min_moves_to_open_report_tab;
       this.max_messages_moved = params.max_messages_moved;
+      this.use_also_thread_index = params.use_also_thread_index;
+      this.pause_between_messages = params.pause_between_messages;
+      this.pause_every_10_messages = params.pause_every_10_messages;
     }
 
 
@@ -121,7 +124,7 @@ export class movingEngine {
         report_data.related_msg_not_found_messages = {};
 
         for await (let message of messages) {
-          samUtils.setPopupRunning(tot_messages);
+          samUtils.setPopupRunning({tot_messages: tot_messages, tot_moved: tot_moved, tot_dest_not_found: tot_dest_not_found, tot_related_msg_not_found: tot_related_msg_not_found});
           if((this.max_messages_moved > 0) && (tot_moved >= this.max_messages_moved)){
             this.logger.log("Max number of messages to move reached, stopping...");
             break;
@@ -187,6 +190,7 @@ export class movingEngine {
               report_data.moved_messages[message.headerMessageId] = {}
               report_data.moved_messages[message.headerMessageId].headerMessageId = message.headerMessageId;
               report_data.moved_messages[message.headerMessageId].dest_folder = dest_folder.name;
+              report_data.moved_messages[message.headerMessageId].dest_folder_id = dest_folder.id;
               report_data.moved_messages[message.headerMessageId].subject = message.subject;
               report_data.moved_messages[message.headerMessageId].date = message.date;
               // Pause after moving a message
@@ -207,6 +211,7 @@ export class movingEngine {
               report_data.dest_folder_not_found_messages[message.headerMessageId] = {}
               report_data.dest_folder_not_found_messages[message.headerMessageId].headerMessageId = message.headerMessageId;
               report_data.dest_folder_not_found_messages[message.headerMessageId].relmessage_folder = related_message.folder.name;
+              report_data.dest_folder_not_found_messages[message.headerMessageId].relmessage_folder_id = related_message.folder.id;
               report_data.dest_folder_not_found_messages[message.headerMessageId].subject = message.subject;
               report_data.dest_folder_not_found_messages[message.headerMessageId].date = message.date;
             }

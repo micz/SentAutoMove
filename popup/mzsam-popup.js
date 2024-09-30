@@ -86,8 +86,35 @@ function hideMessageDiv(){
 }
 
 function setMessage(message) {
-    samLog.log("Setting popup message: " + message);
-    document.getElementById("miczMessage").innerText = message;
+    if((!"data" in message) || (message.data === undefined) || (message.data === null)) {
+        document.getElementById("miczMessage").innerText = message.message;
+    }else{
+        if(message.type== "running"){
+            const table = document.createElement("table");
+            table.className = "live-counter";
+            const tr = document.createElement("tr");
+            const td1 = document.createElement("td");
+            const td2 = document.createElement("td");
+            td1.className = "live-counter-msg";
+            td1.textContent = message.message;
+            const br1 = document.createElement("br");
+            const br2 = document.createElement("br");
+            const br3 = document.createElement("br");
+            td2.appendChild(document.createTextNode(browser.i18n.getMessage("Messages") + ": " + message.data.tot_messages));
+            td2.appendChild(br1);
+            td2.appendChild(document.createTextNode(browser.i18n.getMessage("Moved") + ": " + message.data.tot_moved));
+            td2.appendChild(br2);
+            td2.appendChild(document.createTextNode(browser.i18n.getMessage("NoDestinationFolder") + ": " + message.data.tot_dest_not_found));
+            td2.appendChild(br3);
+            td2.appendChild(document.createTextNode(browser.i18n.getMessage("NoRelatedMessage") + ": " + message.data.tot_related_msg_not_found));
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            table.appendChild(tr);
+            document.getElementById("miczMessage").innerHTML = "";
+            document.getElementById("miczMessage").appendChild(table);
+        }
+    }
+    samLog.log("Setting popup message: " + JSON.stringify(message));
 }
 
 function showAskUserDiv(){
@@ -125,7 +152,7 @@ async function setContinuousMessageUpdate() {
 function cancelContinousMessageUpdate() {
     clearInterval(updateInterval);
     hideMessageDiv();
-    setMessage("SAM: Idle");
+    setMessage({message: "SAM: " + browser.i18n.getMessage("Idle") + "!", type: "idle"});
     browser.browserAction.setIcon({path: "images/icon.png"});
 }
 
