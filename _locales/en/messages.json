@@ -396,5 +396,25 @@
   "prefs_OptionText_imap_force_folder_update_info": {
     "message": "Force an update of the destination folder, after a message move, when using an IMAP account.",
     "description": ""
+  },
+  "Idle" : {
+    "message": "Idle",
+    "description": ""
+  },
+  "Starting" : {
+    "message": "Starting",
+    "description": ""
+  },
+  "Completed" : {
+    "message": "Completed",
+    "description": ""
+  },
+  "Error" : {
+    "message": "Error",
+    "description": ""
+  },
+  "Running" : {
+    "message": "Running",
+    "description": ""
   }
 }
