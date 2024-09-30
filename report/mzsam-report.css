@@ -138,6 +138,12 @@ body {
     margin-right: 0.3em;
 }
 
+.click-folder{
+    cursor: pointer;
+    color: #1a73e8;
+    text-decoration: underline;
+}
+
 
 @media (prefers-color-scheme: dark) {
     body {
