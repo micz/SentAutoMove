@@ -58,27 +58,27 @@ export const samUtils = {
   },
 
   setPopupIdle(){
-    samUtils.setPopupMessage("SAM: Idle");
+    samUtils.setPopupMessage({message: "SAM: " + browser.i18n.getMessage("Idle"), type: "idle"});
     browser.browserAction.setIcon({path: "images/icon.png"});
   },
 
   setPopupStarting(){
-    samUtils.setPopupMessage("SAM: Starting...");
+    samUtils.setPopupMessage({message: "SAM: " + browser.i18n.getMessage("Starting") + "...", type: "starting"});
     browser.browserAction.setIcon({path: "images/icon-running.png"});
   },
 
-  setPopupRunning(count){
-    samUtils.setPopupMessage("SAM: [" + count + "] Running...");
+  setPopupRunning(data){
+    samUtils.setPopupMessage({message: "SAM: " + browser.i18n.getMessage("Running") + "...", data: data, type: "running"});
     browser.browserAction.setIcon({path: "images/icon-running.png"});
   },
 
   setPopupCompleted(){
-    samUtils.setPopupMessage("SAM: Completed!");
+    samUtils.setPopupMessage({message: "SAM: " + browser.i18n.getMessage("Completed") + "!", type: "completed"});
     browser.browserAction.setIcon({path: "images/icon-completed.png"});
   },
 
   setPopupError(){
-    samUtils.setPopupMessage("SAM: Error!");
+    samUtils.setPopupMessage({message: "SAM: " + browser.i18n.getMessage("Error") + "!", type: "error"});
     browser.browserAction.setIcon({path: "images/icon-error.png"});
   },
 
@@ -123,7 +123,7 @@ export const samUtils = {
 
       return folder;
     } else {
-      console.log("No active tab found.");
+      console.error("No active tab found.");
       return null;
     }
   },
