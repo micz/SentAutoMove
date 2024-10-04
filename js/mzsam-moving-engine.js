@@ -37,6 +37,7 @@ export class movingEngine {
   max_messages_moved = 0;
   pause_between_messages = 200;
   pause_every_10_messages = 1000;
+  force_stop = false;
 
     // async sentMessageListener(sendInfo){
     //   if((sendInfo.mode == "sendNow") && (sendInfo.headerMessageId != undefined) && (sendInfo.headerMessageId != '')){
@@ -124,9 +125,14 @@ export class movingEngine {
         report_data.related_msg_not_found_messages = {};
 
         for await (let message of messages) {
-          samUtils.setPopupRunning({tot_messages: tot_messages, tot_moved: tot_moved, tot_dest_not_found: tot_dest_not_found, tot_related_msg_not_found: tot_related_msg_not_found});
+          samUtils.setPopupRunning({folder: folder_string, tot_messages: tot_messages, tot_moved: tot_moved, tot_dest_not_found: tot_dest_not_found, tot_related_msg_not_found: tot_related_msg_not_found});
           if((this.max_messages_moved > 0) && (tot_moved >= this.max_messages_moved)){
             this.logger.log("Max number of messages to move reached, stopping...");
+            break;
+          }
+          if(this.force_stop){
+            this.logger.log("Process stopped by the user, stopping...");
+            this.force_stop = false;
             break;
           }
           let curr_account_id = account_id;
@@ -185,7 +191,7 @@ export class movingEngine {
               await this.doMessagesMove([message.id], dest_folder, imap_force_folder_update);
               // ========================================================================================================================
               tot_moved++;
-              this.logger.log("Moving [" + message.subject + "] to [" + dest_folder.name + "] [" + message.headerMessageId + "]");
+              this.logger.log("Moving [" + message.subject + "] to [" + dest_folder.name + "] [" + message.headerMessageId + "] [" + samUtils.formatDateString(message.date) + "]");
               this.logger.log("Messages moved [" + tot_moved + "]");
               report_data.moved_messages[message.headerMessageId] = {}
               report_data.moved_messages[message.headerMessageId].headerMessageId = message.headerMessageId;
@@ -276,7 +282,7 @@ export class movingEngine {
     // this method finds the message related to the one passed to it
     async findRelatedMessage(message, account_id = 0){
 
-      this.logger.log("findRelatedMessage for message: " + message.headerMessageId);
+      this.logger.log("findRelatedMessage for message [" + message.headerMessageId + "] [" + message.subject + "] [" + samUtils.formatDateString(message.date) + "]");
       let fullMsg = await messenger.messages.getFull(message.id);
       // console.log(">>>>>>>>>>>> fullMsg: " + JSON.stringify(fullMsg.headers));
       let inReplyToHeaders = fullMsg.headers['in-reply-to'];
@@ -390,6 +396,10 @@ export class movingEngine {
       return false;
     }
 
+    doStop(){
+      this.force_stop = true;
+    }
+
     extractReferencesIDs(references){
       // Regular expression to match text inside <>
       const regex = /<([^>]+)>/g;
@@ -472,7 +482,7 @@ export class movingEngine {
       yield* this.processFolderAndSubfolders(folder, queryInfo, account_id);
     }
   } catch(e) {
-    console.error("getAccountMessages error: " + e);
+    this.logger.error("getAccountMessages error: " + e);
   }
   }
 
@@ -488,7 +498,7 @@ export class movingEngine {
           yield* this.processFolderAndSubfolders(subfolder, queryInfo, account_id);
       }
     } catch(e) {
-      console.error("processFolderAndSubfolders error: " + e);
+      this.logger.error("processFolderAndSubfolders error: " + e);
     }
   }
 

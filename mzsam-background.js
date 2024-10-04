@@ -43,6 +43,8 @@ samStore.istb128orgreater = await samUtils.isThunderbird128OrGreater();
 samStore.do_debug = await samPrefs.getPref("do_debug");
 let samLog = new samLogger("mzsam-background", samStore.do_debug);
 
+let mvEngine  = null;
+
 
 // browser.browserAction.onClicked.addListener(async () => {
 //     let prefs = await samPrefs.getPrefs(Object.keys(prefs_default));
@@ -76,6 +78,9 @@ messenger.runtime.onMessage.addListener(async (message, sender, sendResponse) =>
                 break;
             case "sam_save_folder_info":
                 setCurrentFolderInfo();
+                break;
+            case 'sam_stop':
+                mvEngine.doStop();
                 break;
             default:
                 break;
@@ -114,7 +119,7 @@ async function run(){
         params[key] = prefs[key];
     }
 
-    let mvEngine = new movingEngine(params);
+    mvEngine = new movingEngine(params);
     try{
         await mvEngine.checkFolder(folder);
     } catch(e) {
@@ -157,7 +162,7 @@ browser.menus.onClicked.addListener(async (info, tab) => {
             params[key] = prefs[key];
         }
 
-        let mvEngine = new movingEngine(params);
+        mvEngine = new movingEngine(params);
         try{
             await mvEngine.moveMessages(info.selectedMessages);
         } catch(e) {
