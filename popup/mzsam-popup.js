@@ -27,15 +27,17 @@ let updateInterval = null;
 let ask_empty_prefix = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    browser.runtime.sendMessage({ command: 'sam_save_folder_info' });
 
     samStore.do_debug = await samPrefs.getPref("do_debug");
     samLog = new samLogger("mzsam-popup", samStore.do_debug);
     samPrefs.logger = new samLogger("mzsam-options", samStore.do_debug);
 
     document.getElementById("miczProceed").addEventListener("click", doProceed);
+    document.getElementById("miczStop").addEventListener("click", doStop);
 
     if(!await samStore.getIsRunning()){
+        await browser.runtime.sendMessage({ command: 'sam_save_folder_info' });
+
         browser.browserAction.setIcon({path: "../images/icon.png"});
         let prefs = await samPrefs.getPrefs(["warn_before_run","_internal__ask_empty_prefix_done","dest_folder_prefix","do_only_sent_folders"]);
 
@@ -88,6 +90,7 @@ function hideMessageDiv(){
 function setMessage(message) {
     if((!"data" in message) || (message.data === undefined) || (message.data === null)) {
         document.getElementById("miczMessage").innerText = message.message;
+        hideStopButton();
     }else{
         if(message.type== "running"){
             const table = document.createElement("table");
@@ -112,6 +115,8 @@ function setMessage(message) {
             table.appendChild(tr);
             document.getElementById("miczMessage").innerHTML = "";
             document.getElementById("miczMessage").appendChild(table);
+            document.getElementById("currFolder").innerText = browser.i18n.getMessage("Folder") + ": " + message.data.folder;
+            showStopButton();
         }
     }
     samLog.log("Setting popup message: " + JSON.stringify(message));
@@ -162,6 +167,7 @@ async function _proceed(){
     setMessage(await samUtils.getPopupMessage());
     showMessageDiv();
     setContinuousMessageUpdate();
+    showStopButton();
 }
 
 function doProceed() {
@@ -170,4 +176,21 @@ function doProceed() {
     if(ask_empty_prefix){
         samPrefs.setPref("_internal__ask_empty_prefix_done", true);
     }
+}
+
+function doStop() {
+    browser.runtime.sendMessage({ command: 'sam_stop' });
+    stoppingStopButton();
+}
+
+function showStopButton() {
+    document.getElementById("miczStop").style.display = "flex";
+}
+
+function stoppingStopButton() {
+    document.getElementById("miczStop").innerText = browser.i18n.getMessage("Stopping") + "...";
+}
+
+function hideStopButton() {
+    document.getElementById("miczStop").style.display = "none";
 }

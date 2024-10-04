@@ -416,5 +416,13 @@
   "Running" : {
     "message": "Running",
     "description": ""
+  },
+  "Stop" : {
+    "message": "Stop",
+    "description": ""
+  },
+  "Stopping" : {
+    "message": "Stopping",
+    "description": ""
   }
 }
