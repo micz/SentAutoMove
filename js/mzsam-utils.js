@@ -30,7 +30,7 @@ export const samUtils = {
         const version = info.version;
         return samUtils.compareThunderbirdVersions(version, '128.0') >= 0;
       } catch (error) {
-        console.error('[ThunderAI] Error retrieving browser information:', error);
+        console.error('[SentAutoMove] Error retrieving browser information:', error);
         return false;
       }
     },
@@ -106,9 +106,12 @@ export const samUtils = {
   },
 
   // Function to get the folder associated with the current tab
-  async getCurrentTabFolder() {
+  async getCurrentTabFolder(windowId = browser.mailTabs.WINDOW_ID_CURRENT) {
     // Get all currently open tabs
-    let tabs = await browser.mailTabs.query({ active: true, currentWindow: true });
+    let tabs = await browser.mailTabs.query({ active: true, windowId: windowId });
+
+    let all_tabs = await browser.mailTabs.query({});
+    console.log(">>>>>>>>>>>>>>>>> All Tabs:", all_tabs);
     
     // Check if there's an active tab
     if (tabs.length > 0) {
@@ -123,7 +126,7 @@ export const samUtils = {
 
       return folder;
     } else {
-      console.error("No active tab found.");
+      console.error(" [SentAutoMove] No active tab found!");
       return null;
     }
   },
