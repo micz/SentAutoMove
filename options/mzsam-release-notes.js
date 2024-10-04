@@ -1,5 +1,5 @@
 /*
- *  ThunderAI [https://micz.it/thunderbird-addon-thunderai/]
+ *  SentAutoMove [https://micz.it/thunderbird-addon-sentautomove/]
  *  Copyright (C) 2024  Mic (m@micz.it)
 
  *  This program is free software: you can redistribute it and/or modify
