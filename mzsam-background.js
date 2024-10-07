@@ -68,7 +68,7 @@ let mvEngine  = null;
 //     run();
 //   });
 
-messenger.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+messenger.runtime.onMessage.addListener( (message, sender, sendResponse) => {
     // Check what type of message we have received and invoke the appropriate
     // handler function.
     if (message && message.hasOwnProperty("command")){
@@ -137,8 +137,8 @@ browser.menus.create({
     contexts: ["message_list"]
     });
 
-browser.menus.onClicked.addListener(async (info, tab) => {
-    if (info.menuItemId === "sam-single-msg") {
+browser.menus.onClicked.addListener( (info, tab) => {
+    async function handleMenuClick() {
         samLog.log("Starting...");
         samUtils.setPopupStarting();
         samStore.setIsRunning(true);
@@ -172,6 +172,10 @@ browser.menus.onClicked.addListener(async (info, tab) => {
         samStore.setIsRunning(false);
         samLog.log("Operation completed!");
         samUtils.setPopupCompleted();
+    }
+
+    if (info.menuItemId === "sam-single-msg") {
+        handleMenuClick();
     }
 });
 
