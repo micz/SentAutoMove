@@ -12,7 +12,7 @@ This ensures that your information remains private and secure at all times.
 <br>
 
 ## Issues & Questions
-Post any issues or questions for SentAutoMove under [Issues](https://github.com/micz/SentAutoMove/issues).
+Post any issues or questions for SentAutoMove [here](https://github.com/micz/SentAutoMove/issues).
 
 <br>
 
@@ -37,4 +37,8 @@ Are you using this addon in your Thunderbird?
 
 ### Graphics
 Addon icon thanks to [Creaticca Creative Agency](https://www.flaticon.com/authors/creaticca-creative-agency)
+
+
+### Code Contributions
+John Bieling for implementing the experimental API usd to force an update of an IMAP folder.
 
