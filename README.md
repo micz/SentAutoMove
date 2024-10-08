@@ -30,7 +30,11 @@ SentAutoMove's changes are logged [here](CHANGELOG.md).
 Are you using this addon in your Thunderbird?
 <br>Consider to support the development making a small donation. [Click here!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=UHN4SXPGEXWQL&lc=IT&item_name=SentAutoMove&item_number=sentautomove&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
 
+
+
 <br>
+
+
 
 ## Attributions
 
@@ -40,5 +44,5 @@ Addon icon thanks to [Creaticca Creative Agency](https://www.flaticon.com/author
 
 
 ### Code Contributions
-John Bieling for implementing the experimental API usd to force an update of an IMAP folder.
+<a href="https://github.com/jobisoft" target="_blank">John Bieling</a> for implementing the experimental API used to force an update of an IMAP folder.
 
