@@ -112,15 +112,15 @@
     "description": ""
   },
   "prefsInfoDesc_1": {
-    "message": "This add-on moves sent emails to the same folder or a subfolder of the original message they replied to. It also works for calendar invites (at least with Outlook 365).",
+    "message": "This add-on moves sent emails to the same folder or a subfolder of the original message they are related to. It also supports calendar invites.",
     "description": ""
   },
   "prefsInfoDesc_2": {
-    "message": "Beware of changing these options. The default values are more conservative to prevent emails from being moved to the wrong places. Change them only if you know what you are doing!",
+    "message": "Beware of changing these options. The default values are set conservatively to prevent emails from being misplaced. Change them only if you know what you are doing!",
     "description": ""
   },
   "prefsInfoDesc_3": {
-    "message": " ",
+    "message": "More info",
     "description": ""
   },
   "TranslateText": {
@@ -343,6 +343,14 @@
   },
   "prefs_OptionText_dest_folder_ok_same_folder_with_prefix_info": {
     "message": "If no destination subfolder is found, use the same folder of the related message if it starts with the correct prefix. This is useful if you reply to a your sent email.",
+    "description": ""
+  },
+  "prefs_OptionText_reverse_reply_search" : {
+    "message": "Reverse reply search",
+    "description": ""
+  },
+  "prefs_OptionText_reverse_reply_search_info" : {
+    "message": "This option requires more time per message. In Thunderbird, it's quick to find a related message when starting from the reply. This option makes it possible to locate the related message when the sent one is the first mail of the conversation.",
     "description": ""
   },
   "prefs_OptionText_use_also_thread_index": {
