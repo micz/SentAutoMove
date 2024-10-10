@@ -180,14 +180,15 @@ export const samUtils = {
   //   return output;
   // },
 
-
+  //TB128 only
   async getAccountFoldersIds(account_id, ignore_archive_folders = true) {
     let output = [];
 
     async function exploreFolders(folders) {
         for (let folder of folders) {
-            if (["trash", "templates", "drafts", "junk", "outbox"].includes(folder.type)) continue;
-            if (ignore_archive_folders && folder.type == "archive") {
+            if (folder.specialUse.some(use => ["trash", "templates", "drafts", "junk", "outbox"].includes(use))) continue;
+            if (ignore_archive_folders && folder.specialUse.includes("archives")) {
+              // console.log(">>>>>>>>> folder ignored:" + JSON.stringify(folder));
                 continue;
             }
             if (!output.includes(folder.id)) {

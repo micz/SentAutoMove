@@ -291,7 +291,7 @@ export class movingEngine {
       if(this.do_only_same_account){
         if(samStore.istb128orgreater){  //TB128
           //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-          query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder));
+          query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archive_folders);
         }else{  // TB 115
           found_messages = this.getAccountMessages(query_params, account_id);
         }
@@ -326,7 +326,7 @@ export class movingEngine {
         if(this.do_only_same_account){
           if(samStore.istb128orgreater){  //TB128
             //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-            query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder));
+            query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archive_folders);
           }else{  // TB 115
             found_messages = this.getAccountMessages(query_params, account_id);
           }
@@ -374,7 +374,7 @@ export class movingEngine {
           if(this.do_only_same_account){
             if(samStore.istb128orgreater){  //TB128
               //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-              query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder));
+              query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archive_folders);
             }else{  // TB 115
               found_messages = this.getAccountMessages(query_params, account_id);
             }
