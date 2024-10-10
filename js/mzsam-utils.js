@@ -111,7 +111,7 @@ export const samUtils = {
     let tabs = await browser.mailTabs.query({ active: true, windowId: windowId });
 
     let all_tabs = await browser.mailTabs.query({});
-    console.log(">>>>>>>>>>>>>>>>> All Tabs:", all_tabs);
+    // console.log(">>>>>>>>>>>>>>>>> All Tabs:", all_tabs);
     
     // Check if there's an active tab
     if (tabs.length > 0) {
