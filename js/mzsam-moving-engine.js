@@ -33,7 +33,7 @@ export class movingEngine {
   dest_folder_type = '';
   dest_folder_prefix = '';
   dest_folder_ok_same_folder_with_prefix = true;
-  ignore_archive_folders = true;
+  ignore_archives_folders = true;
   min_moves_to_open_report_tab = 0;
   max_messages_moved = 0;
   pause_between_messages = 200;
@@ -51,7 +51,7 @@ export class movingEngine {
     this.dest_folder_type = params.dest_folder_type;
     this.dest_folder_prefix = params.dest_folder_prefix;
     this.dest_folder_ok_same_folder_with_prefix = params.dest_folder_ok_same_folder_with_prefix;
-    this.ignore_archive_folders = params.ignore_archive_folders;
+    this.ignore_archives_folders = params.ignore_archives_folders;
     this.min_moves_to_open_report_tab = params.min_moves_to_open_report_tab;
     this.max_messages_moved = params.max_messages_moved;
     this.use_also_thread_index = params.use_also_thread_index;
@@ -291,7 +291,7 @@ export class movingEngine {
       if(this.do_only_same_account){
         if(samStore.istb128orgreater){  //TB128
           //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-          query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archive_folders);
+          query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archives_folders);
         }else{  // TB 115
           found_messages = this.getAccountMessages(query_params, account_id);
         }
@@ -326,7 +326,7 @@ export class movingEngine {
         if(this.do_only_same_account){
           if(samStore.istb128orgreater){  //TB128
             //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-            query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archive_folders);
+            query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archives_folders);
           }else{  // TB 115
             found_messages = this.getAccountMessages(query_params, account_id);
           }
@@ -374,7 +374,7 @@ export class movingEngine {
           if(this.do_only_same_account){
             if(samStore.istb128orgreater){  //TB128
               //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-              query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archive_folders);
+              query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archives_folders);
             }else{  // TB 115
               found_messages = this.getAccountMessages(query_params, account_id);
             }
@@ -503,7 +503,7 @@ export class movingEngine {
 
     for (let folder of folders) {
       if(["trash", "templates", "drafts", "junk", "outbox"].includes(folder.type)) continue;
-      if(this.ignore_archive_folders && folder.type == "archive") {
+      if(this.ignore_archives_folders && folder.type == "archives") {
         continue;
       }
       yield* this.processFolderAndSubfolders(folder, queryInfo, account_id);

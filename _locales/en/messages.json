@@ -67,11 +67,11 @@
     "message": "Consider only folders that are marked as \"Sent\" type. Otherwise give a warning to the user.",
     "description": ""
   },
-  "prefs_OptionText_ignore_archive_folders": {
+  "prefs_OptionText_ignore_archives_folders": {
     "message": "Ignore \"archive\" folders",
     "description": ""
   },
-  "prefs_OptionText_ignore_archive_folders_info": {
+  "prefs_OptionText_ignore_archives_folders_info": {
     "message": "Do not search for related mails that are in \"archive\" folders.",
     "description": ""
   },

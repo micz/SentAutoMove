@@ -159,7 +159,7 @@ export const samUtils = {
     return account.name;
   },
 
-  // async getAccountFoldersIds(account_id, ignore_archive_folders = true) {    // only TB128+
+  // async getAccountFoldersIds(account_id, ignore_archives_folders = true) {    // only TB128+
   //   let output = [];
 
   //   let folders = await browser.folders.getSubFolders(account_id);
@@ -168,7 +168,7 @@ export const samUtils = {
 
   //   for (let folder of folders) {
   //     if(["trash", "templates", "drafts", "junk", "outbox"].includes(folder.type)) continue;
-  //     if(ignore_archive_folders && folder.type == "archive") {
+  //     if(ignore_archives_folders && folder.type == "archive") {
   //       continue;
   //     }
   //     if(!output.includes(folder.id)) {
@@ -181,13 +181,13 @@ export const samUtils = {
   // },
 
   //TB128 only
-  async getAccountFoldersIds(account_id, ignore_archive_folders = true) {
+  async getAccountFoldersIds(account_id, ignore_archives_folders = true) {
     let output = [];
 
     async function exploreFolders(folders) {
         for (let folder of folders) {
             if (folder.specialUse.some(use => ["trash", "templates", "drafts", "junk", "outbox"].includes(use))) continue;
-            if (ignore_archive_folders && folder.specialUse.includes("archives")) {
+            if (ignore_archives_folders && folder.specialUse.includes("archives")) {
               // console.log(">>>>>>>>> folder ignored:" + JSON.stringify(folder));
                 continue;
             }

@@ -8,7 +8,7 @@ export const prefs_default = {
     'dest_folder_type': 'subfolder',  // allowed values: 'subfolder', 'same_folder'
     'dest_folder_prefix': '',
     'dest_folder_ok_same_folder_with_prefix': true,
-    'ignore_archive_folders': true,
+    'ignore_archives_folders': true,
     'min_moves_to_open_report_tab': 10,
     'max_messages_moved': 20,
     'pause_between_messages': 200,
