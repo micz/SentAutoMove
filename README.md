@@ -1,6 +1,7 @@
 # ![SentAutoMove icon](images/icon-32px.png "SentAutoMove")  SentAutoMove
 
 A Thunderbird add-on that automatically moves your replies to follow the original message!
+<br>Find out how it works here: [https://micz.it/thunderbird-addon-sentautomove/how-it-works/](https://micz.it/thunderbird-addon-sentautomove/how-it-works/)
 
 <br>
 
