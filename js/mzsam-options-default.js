@@ -4,6 +4,7 @@ export const prefs_default = {
     'do_only_sent': true,
     'do_only_sent_folders': true,
     'use_also_thread_index': false,
+    'reverse_reply_search': false,
     'dest_folder_type': 'subfolder',  // allowed values: 'subfolder', 'same_folder'
     'dest_folder_prefix': '',
     'dest_folder_ok_same_folder_with_prefix': true,
