@@ -3,8 +3,7 @@
 
 
 
-
-<h2>Version 1.0 - ??/??/2024</h2>
+<h2>Version 1.0 - 10/10/2024</h2>
 <ul>
   <li>First release.</li>
 </ul>
