@@ -362,7 +362,8 @@ export class movingEngine {
       
       //console.log(">>>>>> message: " + JSON.stringify(message));
       if(use_thread_index || this.reverse_reply_search){
-        for (let recipient of message.recipients) {
+        let recipients_list = message.recipients.concat(message.ccList);        
+        for (let recipient of recipients_list) {
           let query_params = {  // get only messages from the recipient of the current message and sent from the current account
             recipients: message.author,
             author: recipient,
