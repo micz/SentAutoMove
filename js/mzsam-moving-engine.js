@@ -386,7 +386,13 @@ export class movingEngine {
 
           for await (let found_msg of found_messages) {
             // console.log(">>>>>>>>>> 1 use_thread_index: " + use_thread_index);
-            let fullFoundMsg = await messenger.messages.getFull(found_msg.id);
+            let fullFoundMsg = null;
+            try{
+              fullFoundMsg = await messenger.messages.getFull(found_msg.id);
+            }catch(e){
+              this.logger.log("Error getting full message, skipping: " + e);
+              continue;
+            }
             // console.log(">>>>>>>>>>>>>> fullFoundMsg.headers: " + JSON.stringify(fullFoundMsg.headers));
             if(this.reverse_reply_search){
               this.logger.log("Doing reverse_reply_search...");
