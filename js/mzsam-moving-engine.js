@@ -275,7 +275,13 @@ export class movingEngine {
   async findRelatedMessage(message, account_id = 0){
 
     this.logger.log("calling findRelatedMessage method for message [" + message.headerMessageId + "] [" + message.subject + "] [" + samUtils.formatDateString(message.date) + "]");
-    let fullMsg = await messenger.messages.getFull(message.id);
+    let fullMsg = null
+    try{
+      fullMsg = await messenger.messages.getFull(message.id);
+    }catch(e){
+      this.logger.log("Error getting the full original message, stopping: " + e);
+      return false;
+    }
     // console.log(">>>>>>>>>>>> fullMsg: " + JSON.stringify(fullMsg.headers));
     let inReplyToHeaders = fullMsg.headers['in-reply-to'];
     this.logger.log("inReplyToHeaders: " + inReplyToHeaders);
@@ -390,7 +396,7 @@ export class movingEngine {
             try{
               fullFoundMsg = await messenger.messages.getFull(found_msg.id);
             }catch(e){
-              this.logger.log("Error getting full message, skipping: " + e);
+              this.logger.log("Error getting the full message when searching for related messages, skipping: " + e);
               continue;
             }
             // console.log(">>>>>>>>>>>>>> fullFoundMsg.headers: " + JSON.stringify(fullFoundMsg.headers));
