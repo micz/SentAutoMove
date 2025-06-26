@@ -15,5 +15,4 @@ export const prefs_default = {
     'pause_every_10_messages': 1000,
     'warn_before_run': true,
     '_internal__ask_empty_prefix_done': false,
-    'imap_force_folder_update': true,
 }

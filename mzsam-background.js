@@ -39,7 +39,6 @@ import { samLogger } from "./js/mzsam-logger.js";
 //     movingEngine.movedMessagesListener(originalMessages, movedMessages);
 // });
 
-samStore.istb128orgreater = await samUtils.isThunderbird128OrGreater();
 samStore.do_debug = await samPrefs.getPref("do_debug");
 let samLog = new samLogger("mzsam-background", samStore.do_debug);
 
