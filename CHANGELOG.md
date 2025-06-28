@@ -3,10 +3,10 @@
 
 
 
-<h2>Version 2.0.0 - ??/??/2025</h2>
+<h2>Version 2.0.0 - 28/06/2025</h2>
       <ul>
         <li>This addons is now a pure mail extension, so the full permission is no more needed.</li>
-        <li>SentAutoMove is now compatible only on Thunderbird 128 and above.</li>
+        <li>SentAutoMove is now compatible only with Thunderbird 128 and above.</li>
         <li>Force destination folder update option removed.</li>
       </ul>
 <h2>Version 1.0.2 - 14/01/2025</h2>
