@@ -24,18 +24,6 @@ export const samUtils = {
 
   regexEmail: /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/,
 
-  async isThunderbird128OrGreater(){
-      try {
-        const info = await browser.runtime.getBrowserInfo();
-        const version = info.version;
-        return samUtils.compareThunderbirdVersions(version, '128.0') >= 0;
-      } catch (error) {
-        console.error('[SentAutoMove] Error retrieving browser information:', error);
-        return false;
-      }
-    },
-
-
   compareThunderbirdVersions(v1, v2) {
       const v1parts = v1.split('.').map(Number);
       const v2parts = v2.split('.').map(Number);
@@ -225,11 +213,7 @@ export const samUtils = {
   },
 
   getParameter(param){
-    if(samStore.istb128orgreater){
-      return param.id;
-    }else{
-      return param;
-    }
+    return param.id;
   },
 
   extractInviteSubject(inputString) {

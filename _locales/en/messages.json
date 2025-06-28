@@ -397,14 +397,6 @@
     "message": "Thunderbird has gone offline. Moving messages in bulk within IMAP accounts while offline is not recommended. The operation has been stopped.",
     "description": ""
   },
-  "prefs_OptionText_imap_force_folder_update": {
-    "message": "Force IMAP folder update",
-    "description": ""
-  },
-  "prefs_OptionText_imap_force_folder_update_info": {
-    "message": "Force an update of the destination folder, after a message move, when using an IMAP account.",
-    "description": ""
-  },
   "Idle" : {
     "message": "Idle",
     "description": ""

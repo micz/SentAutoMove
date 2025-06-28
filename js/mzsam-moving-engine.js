@@ -64,14 +64,8 @@ export class movingEngine {
   async checkFolder(folder){
     let query_params = {}
 
-    if(samStore.istb128orgreater){
-      query_params = {
-        folderId: folder.id,
-      }
-    }else{
-      query_params = {
-        folder: folder,
-      }
+    query_params = {
+      folderId: folder.id,
     }
     
     this.logger.log("Checking folder [" + folder.name + "]");
@@ -87,7 +81,6 @@ export class movingEngine {
       this.logger.changeDebug(samStore.do_debug);
 
       let operation_aborted = false;
-      let imap_force_folder_update = samPrefs.getPref("imap_force_folder_update");
 
       let report_data = {};
       report_data.report_date = new Date();
@@ -107,7 +100,7 @@ export class movingEngine {
 
       let folder_string = browser.i18n.getMessage("executedFromSelection");
       if(query_params !== null){
-        folder_string = samStore.istb128orgreater ? (await messenger.folders.get(query_params.folderId)).name : query_params.folder.name;
+        folder_string = (await messenger.folders.get(query_params.folderId)).name;
       }
 
       report_data.current_folder = folder_string;
@@ -180,7 +173,7 @@ export class movingEngine {
           if(dest_folder !== false){
             // console.log(">>>>>>>>>>>> dest_folder: " + JSON.stringify(dest_folder));
             // ================================ The following line has to be commented out for testing ================================
-            await this.doMessagesMove([message.id], dest_folder, imap_force_folder_update);
+            await this.doMessagesMove([message.id], dest_folder);
             // ========================================================================================================================
             tot_moved++;
             this.logger.log("Moving [" + message.subject + "] to [" + dest_folder.name + "] [" + message.headerMessageId + "] [" + samUtils.formatDateString(message.date) + "]");
@@ -252,23 +245,12 @@ export class movingEngine {
       }
   }
 
-  async doMessagesMove(messageIds, dest_folder, force_folder_update = true){
+  async doMessagesMove(messageIds, dest_folder){
     this.logger.log("Start moving messages: " + JSON.stringify(messageIds));
     this.logger.log("Destination folder: " + JSON.stringify(dest_folder));
     await messenger.messages.move(messageIds, samUtils.getParameter(dest_folder)).catch((err) => {
       this.logger.error("Error moving message [" + message.subject + "] [" + message.headerMessageId + "]: " + err);
     });
-    if(force_folder_update){
-      this.logger.log("Messasegs moved, waiting for destination folder update...");
-      try{
-      await browser.ImapTools.forceServerUpdate(dest_folder.accountId, dest_folder.path);
-      }catch(err){
-        this.logger.error("Error updating destination folder: " + err);
-      }
-      this.logger.log("Destination folder updated.");
-    }else{
-      this.logger.log("Not forcing a destination folder update.");
-    }
   }
 
   // this method finds the message related to the one passed to it
@@ -295,12 +277,8 @@ export class movingEngine {
       let found_messages = null;
       //only from this account
       if(this.do_only_same_account){
-        if(samStore.istb128orgreater){  //TB128
-          //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-          query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archives_folders);
-        }else{  // TB 115
-          found_messages = this.getAccountMessages(query_params, account_id);
-        }
+        //query_params.accountId = samUtils.getFolderAccountId(message.folder);
+        query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archives_folders);
       }
 
       if(found_messages == null) found_messages = this.getMessages(messenger.messages.query(query_params));
@@ -330,12 +308,8 @@ export class movingEngine {
         let found_messages = null;
         //only from this account
         if(this.do_only_same_account){
-          if(samStore.istb128orgreater){  //TB128
-            //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-            query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archives_folders);
-          }else{  // TB 115
-            found_messages = this.getAccountMessages(query_params, account_id);
-          }
+          //query_params.accountId = samUtils.getFolderAccountId(message.folder);
+          query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archives_folders);
         }
 
         if(found_messages == null) found_messages = this.getMessages(messenger.messages.query(query_params));
@@ -379,12 +353,8 @@ export class movingEngine {
           let found_messages = null;
           //only from this account
           if(this.do_only_same_account){
-            if(samStore.istb128orgreater){  //TB128
-              //query_params.accountId = samUtils.getFolderAccountId(message.folder);
-              query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archives_folders);
-            }else{  // TB 115
-              found_messages = this.getAccountMessages(query_params, account_id);
-            }
+            //query_params.accountId = samUtils.getFolderAccountId(message.folder);
+            query_params.folderId = await samUtils.getAccountFoldersIds(samUtils.getFolderAccountId(message.folder), this.ignore_archives_folders);
           }
 
           if(found_messages == null) found_messages = this.getMessages(messenger.messages.query(query_params));

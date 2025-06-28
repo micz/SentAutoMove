@@ -196,23 +196,15 @@ function renderReport(type, dataList, containerDiv) {
 
           if(type != 3){
             destFolderCell = document.createElement('div');
-            if(samStore.istb128orgreater){
-              destFolderCell.className = 'table-cell click-folder';
-            } else {
-              destFolderCell.className = 'table-cell';
-            }
+            destFolderCell.className = 'table-cell click-folder';
             switch(type) {
               case 1:
                 destFolderCell.textContent = message.dest_folder;
-                if(samStore.istb128orgreater){
-                  destFolderCell.onclick = function() { browser.mailTabs.create({displayedFolder: message.dest_folder_id});};
-                }
+                destFolderCell.onclick = function() { browser.mailTabs.create({displayedFolder: message.dest_folder_id});};
                 break;
               case 2:
                 destFolderCell.textContent = message.relmessage_folder;
-                if(samStore.istb128orgreater){
-                  destFolderCell.onclick = function() { browser.mailTabs.create({displayedFolder: message.relmessage_folder_id});};
-                }
+                destFolderCell.onclick = function() { browser.mailTabs.create({displayedFolder: message.relmessage_folder_id});};
                 break;
               default:
                 destFolderCell.textContent = browser.i18n.getMessage("ReportTypeUndefined");

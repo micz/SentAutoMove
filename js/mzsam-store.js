@@ -19,7 +19,6 @@
 
 export const samStore = {
     'do_debug': false,
-    'istb128orgreater': false,
     
     async setOnline(value) {
         await samStore.setSessionData("tbOnline", value);
