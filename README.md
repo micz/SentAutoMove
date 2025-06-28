@@ -43,7 +43,3 @@ Are you using this addon in your Thunderbird?
 ### Graphics
 Addon icon thanks to [Creaticca Creative Agency](https://www.flaticon.com/authors/creaticca-creative-agency)
 
-
-### Code Contributions
-<a href="https://github.com/jobisoft" target="_blank">John Bieling</a> for implementing the experimental API used to force an update of an IMAP folder.
-
